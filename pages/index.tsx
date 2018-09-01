@@ -1,9 +1,14 @@
-import Link from 'next/link'
+import { maat } from "./App";
 
 export default () =>
   <div>
-    Hello World.{' '}
-    <Link href="/about">
-      <a>About</a>
-    </Link>
+    Tänään on {' ' }
+    {new Date().getDate() + '.' }
+    {new Date().getMonth() + 1 + '.'}
+    {new Date().getFullYear()}
+
+    
+
+    {maat.map(item => <div>{item.name} {item.population} </div>)}
+        
   </div>
