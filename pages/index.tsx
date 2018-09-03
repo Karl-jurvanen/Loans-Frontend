@@ -1,14 +1,9 @@
 import { maat } from "./App";
 
-export default () =>
+export default () => (
   <div>
-    Tänään on {' ' }
-    {new Date().getDate() + '.' }
-    {new Date().getMonth() + 1 + '.'}
+    {"Tänään on "} {new Date().getDate() + "."}
+    {new Date().getMonth() + 1 + "."}
     {new Date().getFullYear()}
-
-    
-
-    {maat.map(item => <div>{item.name} {item.population} </div>)}
-        
   </div>
+);
