@@ -1,0 +1,16 @@
+#! dockerfile
+FROM mhart/alpine-node:latest
+
+COPY .next /opt/app/.next
+COPY node_modules /opt/app/node_modules
+COPY static /opt/app/static
+
+RUN apk update && apk add tzdata \
+  && cp /usr/share/zoneinfo/Europe/Helsinki /etc/localtime \
+  && echo "Europe/Helsinki" > /etc/timezone
+
+WORKDIR /opt/app
+EXPOSE 3000
+
+CMD ["node_modules/next/dist/bin/next", "start"]
+

@@ -1,0 +1,14 @@
+version: '2'
+services:
+  webapp:
+    build:
+      context: ./
+      dockerfile: .dockerfiles/WebappDev
+    ports:
+     - "3000:3000"
+    restart: always
+    volumes:
+     - ./webapp/pages:/opt/app/pages
+     - ./webapp/static:/opt/app/static:ro
+     - ./webapp/node_modules:/opt/app/node_modules:ro
+
