@@ -1,12 +1,12 @@
 {
   "name": "with-typescript",
-  "version": "1.0.0",
+  "version": "v1.0.0",
   "scripts": {
     "dev": "next",
     "build": "next build",
+    "start": "next start",
     "lint": "eslint .",
-    "test": "yarn run lint",
-    "start": "next start"
+    "test": "yarn run lint"
   },
   "dependencies": {
     "@babel/core": "^7.1.0",
