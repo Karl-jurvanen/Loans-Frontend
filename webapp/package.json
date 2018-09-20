@@ -4,6 +4,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
+    "lint": "eslint .",
+    "test": "yarn run lint",
     "start": "next start"
   },
   "dependencies": {
