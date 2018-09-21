@@ -1,35 +1,25 @@
 Arguments: 
-  /usr/bin/node /usr/local/bin/yarn version
+  /home/karl/.nvm/versions/node/v10.11.0/bin/node /usr/local/bin/yarn add eslint
 
 PATH: 
-  /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+  /home/karl/.nvm/versions/node/v10.11.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 
 Yarn version: 
   1.9.4
 
 Node version: 
-  8.10.0
+  10.11.0
 
 Platform: 
   linux x64
 
 Trace: 
-  Error: canceled
-      at Interface.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:126002:13)
-      at emitNone (events.js:106:13)
-      at Interface.emit (events.js:208:7)
-      at Interface._ttyWrite (readline.js:775:16)
-      at ReadStream.onkeypress (readline.js:160:10)
-      at emitTwo (events.js:126:13)
-      at ReadStream.emit (events.js:214:7)
-      at emitKeys (internal/readline.js:420:14)
-      at emitKeys.next (<anonymous>)
-      at ReadStream.onData (readline.js:1011:36)
+  Error: EACCES: permission denied, rmdir '/home/karl/web-jatkokurssi/webapp/node_modules/.cache/autodll-webpack-plugin'
 
 npm manifest: 
   {
     "name": "with-typescript",
-    "version": "v1.9.4",
+    "version": "1.0.0",
     "scripts": {
       "dev": "next",
       "build": "next build",
@@ -39,9 +29,9 @@ npm manifest:
       "@material-ui/core": "^3.1.0",
       "@zeit/next-typescript": "1.1.0",
       "eslint": "^5.6.0",
-      "next": "latest",
-      "react": "^16.2.0",
-      "react-dom": "^16.2.0"
+      "next": "^7.0.0",
+      "react": "^16.5.2",
+      "react-dom": "^16.5.2"
     },
     "devDependencies": {
       "@types/next": "latest",
@@ -740,15 +730,15 @@ Lockfile:
       warning "^4.0.1"
   
   "@types/jss@^9.5.3":
-    version "9.5.5"
-    resolved "https://registry.yarnpkg.com/@types/jss/-/jss-9.5.5.tgz#57ed99ae768c203677cd64e0ce0df02c74075bf8"
+    version "9.5.6"
+    resolved "https://registry.yarnpkg.com/@types/jss/-/jss-9.5.6.tgz#96e1d246ddfbccc4867494077c714773cf29acde"
     dependencies:
       csstype "^2.0.0"
       indefinite-observable "^1.0.1"
   
   "@types/next@latest":
-    version "6.1.6"
-    resolved "https://registry.yarnpkg.com/@types/next/-/next-6.1.6.tgz#4a62690eadb6328845539a5caf275d21a2eb2524"
+    version "6.1.7"
+    resolved "https://registry.yarnpkg.com/@types/next/-/next-6.1.7.tgz#663e6118353d88eea6c45b6da9495a9419fad5ef"
     dependencies:
       "@types/node" "*"
       "@types/node-fetch" "*"
@@ -968,8 +958,8 @@ Lockfile:
       uri-js "^4.2.2"
   
   ansi-colors@^3.0.0:
-    version "3.0.5"
-    resolved "https://registry.yarnpkg.com/ansi-colors/-/ansi-colors-3.0.5.tgz#cb9dc64993b64fd6945485f797fc3853137d9a7b"
+    version "3.0.6"
+    resolved "https://registry.yarnpkg.com/ansi-colors/-/ansi-colors-3.0.6.tgz#a0b9e00e8c1cc6685b1c3130dbeb9abed03ca6a4"
   
   ansi-escapes@^3.0.0:
     version "3.1.0"
@@ -1378,8 +1368,8 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/callsites/-/callsites-0.2.0.tgz#afab96262910a7f33c19a5775825c69f34e350ca"
   
   caniuse-lite@^1.0.30000884:
-    version "1.0.30000885"
-    resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000885.tgz#e889e9f8e7e50e769f2a49634c932b8aee622984"
+    version "1.0.30000886"
+    resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000886.tgz#2127186c4f57da10d3ba26fc3e87dce4a5ddd3ae"
   
   case-sensitive-paths-webpack-plugin@2.1.2:
     version "2.1.2"
@@ -2699,8 +2689,10 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/is-stream/-/is-stream-1.1.0.tgz#12d4a3dd4e68e0b79ceb8dbc84173ae80d91ca44"
   
   is-symbol@^1.0.1:
-    version "1.0.1"
-    resolved "https://registry.yarnpkg.com/is-symbol/-/is-symbol-1.0.1.tgz#3cc59f00025194b6ab2e38dbae6689256b660572"
+    version "1.0.2"
+    resolved "https://registry.yarnpkg.com/is-symbol/-/is-symbol-1.0.2.tgz#a055f6ae57192caee329e7a860118b497a950f38"
+    dependencies:
+      has-symbols "^1.0.0"
   
   is-windows@^1.0.2:
     version "1.0.2"
@@ -2908,8 +2900,8 @@ Lockfile:
       strip-bom "^3.0.0"
   
   loader-runner@^2.3.0:
-    version "2.3.0"
-    resolved "https://registry.yarnpkg.com/loader-runner/-/loader-runner-2.3.0.tgz#f482aea82d543e07921700d5a46ef26fdac6b8a2"
+    version "2.3.1"
+    resolved "https://registry.yarnpkg.com/loader-runner/-/loader-runner-2.3.1.tgz#026f12fe7c3115992896ac02ba022ba92971b979"
   
   loader-utils@1.1.0, loader-utils@^1.0.2, loader-utils@^1.1.0:
     version "1.1.0"
@@ -3201,7 +3193,7 @@ Lockfile:
     version "2.5.2"
     resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.5.2.tgz#489105ce7bc54e709d736b195f82135048c50fcc"
   
-  next@latest:
+  next@^7.0.0:
     version "7.0.0"
     resolved "https://registry.yarnpkg.com/next/-/next-7.0.0.tgz#c919b325fbce21b6a1d6cd1cc0be148540e77bfd"
     dependencies:
@@ -3766,7 +3758,7 @@ Lockfile:
       minimist "^1.2.0"
       strip-json-comments "~2.0.1"
   
-  react-dom@^16.2.0:
+  react-dom@^16.5.2:
     version "16.5.2"
     resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.5.2.tgz#b69ee47aa20bab5327b2b9d7c1fe2a30f2cfa9d7"
     dependencies:
@@ -3810,7 +3802,7 @@ Lockfile:
       prop-types "^15.6.2"
       react-lifecycles-compat "^3.0.4"
   
-  react@^16.2.0:
+  react@^16.5.2:
     version "16.5.2"
     resolved "https://registry.yarnpkg.com/react/-/react-16.5.2.tgz#19f6b444ed139baa45609eee6dc3d318b3895d42"
     dependencies:
@@ -4609,14 +4601,14 @@ Lockfile:
       set-value "^0.4.3"
   
   unique-filename@^1.1.0:
-    version "1.1.0"
-    resolved "https://registry.yarnpkg.com/unique-filename/-/unique-filename-1.1.0.tgz#d05f2fe4032560871f30e93cbe735eea201514f3"
+    version "1.1.1"
+    resolved "https://registry.yarnpkg.com/unique-filename/-/unique-filename-1.1.1.tgz#1d69769369ada0583103a1e6ae87681b56573230"
     dependencies:
       unique-slug "^2.0.0"
   
   unique-slug@^2.0.0:
-    version "2.0.0"
-    resolved "https://registry.yarnpkg.com/unique-slug/-/unique-slug-2.0.0.tgz#db6676e7c7cc0629878ff196097c78855ae9f4ab"
+    version "2.0.1"
+    resolved "https://registry.yarnpkg.com/unique-slug/-/unique-slug-2.0.1.tgz#5e9edc6d1ce8fb264db18a507ef9bd8544451ca6"
     dependencies:
       imurmurhash "^0.1.4"
   
