@@ -22,5 +22,8 @@
       "es2015",
       "es2016"
     ]
-  }
+  },
+  "include": [
+    "src/**/*", "pages/App.ts"
+  ]
 }

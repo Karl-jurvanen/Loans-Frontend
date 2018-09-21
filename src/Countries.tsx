@@ -1,5 +1,16 @@
+interface Country {
+  ID: string;
 
-let Countries: any[] = [
+  name: string;
+
+  population: string;
+
+  percentage: string;
+
+  position: string;
+}
+
+let Countries: Country[] = [
   {
     ID: "1067",
     name: "China",
