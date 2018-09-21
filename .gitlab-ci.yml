@@ -1,0 +1,81 @@
+variables:
+  REMOTE_HOST: deploy@172.16.6.14
+  REMOTE_APP_FOLDER: pipeline-example
+  IMAGE_TAG: latest
+
+stages:
+  - test
+  - build
+  - deploy
+
+# Run linting & Unit tests
+test_webapp:
+  image: mhart/alpine-node:latest
+  stage: test
+  # Save node_modules as build artifacts, so they don't have to be reinstalled on later stages
+  artifacts:
+    paths:
+      - webapp/node_modules/
+  # Preserve Yarn module cache between pipelines
+  cache:
+    paths:
+      - ~/.cache/yarn/
+  script:
+    - echo -e 'https://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories
+    # Install latest yarn from the Alpine repositories
+    - apk add --update yarn
+    # Install NPM modules
+    - cd webapp && yarn install
+    # Run tests (only ESlint, no unit tests on this example app)
+    - yarn test
+
+build_webapp:
+  image: showpiper/alpine-node-yarn:latest
+  stage: build
+  # Set test-stage as dependency, so we will import the build artifact files (node_modules) to this stage
+  dependencies:
+    - test_webapp
+  # Artifacts from this stage will contain the production build of the application.
+  # In Next.js the build will be created to .next/
+  artifacts:
+    paths:
+      - webapp/.next/
+  script:
+    - cd webapp
+    - NODE_ENV=production yarn run build
+
+deploy_webapp:
+  environment:
+    name: staging
+    url: http://pipeline-example.iotlab.tamk.fi/
+  image: docker:1.12
+  stage: deploy
+  # Start the "Docker in Docker"-service so we can build Docker images
+  services:
+    - docker:1.12-dind
+  dependencies:
+    - test_webapp
+    - build_webapp
+  script:
+    - apk update && apk add rsync openssh
+    # Prepare SSH settings
+    - mkdir -p ~/.ssh && (umask  077 ; echo $DEPLOY_KEY_PRIVATE | base64 -d > ~/.ssh/id_rsa)
+    - cat .my_known_hosts >> ~/.ssh/known_hosts
+    # Build webapp container
+    - cp .dockerfiles/WebappProd webapp/Dockerfile && cd webapp
+    - docker build -t $CI_REGISTRY_IMAGE/webapp:$IMAGE_TAG . && cd ..
+    # Push Docker images to remote registry on GitLab
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker push $CI_REGISTRY_IMAGE/webapp:$IMAGE_TAG
+    # Create env file containing secrets (imported from GitLab project settings)
+    - echo "SECRET_API_KEY=$SECRET_API_KEY" >> .env
+    # Prepare files for transfer
+    - mkdir $REMOTE_APP_FOLDER
+    - cp docker-compose.stag.yml $REMOTE_APP_FOLDER/docker-compose.yml
+    - cp .container-setup.sh $REMOTE_APP_FOLDER/
+    - cp .env $REMOTE_APP_FOLDER/
+    # Copy files to server
+    - rsync -r $REMOTE_APP_FOLDER $REMOTE_HOST:./
+    # Run container-setup.sh to set up Docker environment on the remote server
+    - ssh $REMOTE_HOST bash $REMOTE_APP_FOLDER/.container-setup.sh $CI_JOB_TOKEN $CI_REGISTRY $CI_REGISTRY_IMAGE $IMAGE_TAG $REMOTE_APP_FOLDER
+
