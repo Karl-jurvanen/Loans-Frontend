@@ -10,5 +10,5 @@ services:
     volumes:
      - ./webapp/pages:/opt/app/pages
      - ./webapp/static:/opt/app/static:ro
-     - ./webapp/node_modules:/opt/app/node_modules:ro
+     - ./webapp/node_modules:/opt/app/node_modules
 

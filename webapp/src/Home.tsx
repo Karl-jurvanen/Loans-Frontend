@@ -1,11 +1,11 @@
-import * as React from 'react';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Countries from '../src/Countries';
+import * as React from "react";
+import Paper from "@material-ui/core/Paper";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Countries from "../src/Countries";
 
 export default () => (
   <Paper className="Muipaper">
@@ -22,7 +22,7 @@ export default () => (
         {Countries.map(row => (
           <TableRow key={row.name}>
             <TableCell>
-              {Number(row.position) % 2 ? row.position : ''}
+              {Number(row.position) % 2 ? row.position : ""}
             </TableCell>
             <TableCell>{row.name}</TableCell>
             <TableCell>{row.percentage}</TableCell>
