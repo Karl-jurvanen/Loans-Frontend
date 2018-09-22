@@ -1,7 +1,7 @@
 import * as React from "react";
 import Country from "./Country";
 
-class Countries extends React.Component {
+class Countries extends React.Component<{ style }, any> {
   maat: any[] = [
     {
       ID: "1067",
@@ -217,7 +217,7 @@ class Countries extends React.Component {
 
   render() {
     return (
-      <div>
+      <div style={{ width: "100%" }}>
         {this.maat.map(row => {
           return <Country key={row.ID} maa={row} />;
         })}

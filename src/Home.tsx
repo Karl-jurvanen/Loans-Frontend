@@ -1,8 +1,7 @@
 import * as React from "react";
 import Countries from "../src/Countries";
 import Country from "./Country";
-import SimpleCard from "./SimpleCard"
-
+import SimpleCard from "./SimpleCard";
 
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -14,6 +13,9 @@ import TableRow from "@material-ui/core/TableRow";
 
 export default () => (
   <Paper className="Muipaper">
-    <Countries/>
+    <div style={{"display": "flex", "width": "100%"}}>
+      <Countries style={{ "flex": "left", "width": "50%" }} />
+      <Countries style={{ "float": "right", "width": "50%" }} />
+    </div>
   </Paper>
 );
