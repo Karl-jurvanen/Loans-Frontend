@@ -228,12 +228,9 @@ class Home extends React.Component<any, {selected}> {
   onSelect(maa) {
     let index = this.state.selected.findIndex(x => x === maa);
 
-    console.log("test", index);
     if (index == -1) {
       var joined = this.state.selected.concat(maa);
-      this.setState({ selected: joined }, () => {
-        console.log("state", this.state.selected);
-      });
+      this.setState({ selected: joined });
     }
   }
 
