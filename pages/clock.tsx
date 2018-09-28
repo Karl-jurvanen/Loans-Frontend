@@ -5,6 +5,6 @@ import Clock from "../src/Clock";
 
 export default () => (
   <Home>
-    <CountriesApp />
+    <Clock />
   </Home>
 );

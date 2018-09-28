@@ -1,6 +1,17 @@
 import * as React from "react";
 
-class Clock extends React.Component<any, any> {
+
+interface IProps {
+  offset:  number; 
+}
+
+
+class Clock extends React.Component< IProps, any> {
+  
+  public static defaultProps: IProps = {
+    offset: 0
+  }
+
   constructor(props) {
     super(props);
     let time = new Date();
