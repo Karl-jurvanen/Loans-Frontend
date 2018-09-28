@@ -3,11 +3,10 @@ import Home from "../src/Home";
 import CountriesApp from "../src/CountriesApp";
 import Clock from "../src/Clock";
 import RestApiDemo from "../src/RestApiDemo"
-import CountriesRest from "../src/CountriesRest"
-import Countries from "../src/Countries";
+import CountriesRestApp from "../src/CountriesRestApp"
 
 export default () => (
   <Home>
-    <CountriesApp/>
+    <CountriesRestApp/>
   </Home>
 );

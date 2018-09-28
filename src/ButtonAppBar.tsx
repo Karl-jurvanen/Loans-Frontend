@@ -29,11 +29,15 @@ function ButtonAppBar(props) {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="title" color="inherit" className={classes.grow}>
-            News
+            React Demo
           </Typography>
 
           <Button className={classes.button} color="inherit" href="/">
             Countries
+          </Button>
+
+          <Button className={classes.button} color="inherit" href="/rest">
+            Rest
           </Button>
 
           <Button className={classes.button} color="inherit" href="/clock">
