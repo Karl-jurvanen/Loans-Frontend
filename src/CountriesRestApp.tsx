@@ -45,8 +45,6 @@ class CountriesRestApp extends React.Component<any, ICountriesState> {
   render() {
     return (
       <div className="Muipaper" style={{ display: "flex" }}>
-        {console.log(this.props.data)}
-
         <Grid container>
           <Grid item xs={6}>
             <CountriesRest
