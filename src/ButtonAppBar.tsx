@@ -5,10 +5,8 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import Grid from "@material-ui/core/Grid";
 import Link from "next/link";
+import Clock from "../src/Clock";
 
 const styles = theme => ({
   root: {
@@ -26,23 +24,31 @@ function ButtonAppBar(props) {
   const { classes } = props;
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      {console.log()}
+      <AppBar position="static" color="primary">
         <Toolbar>
           <Typography variant="title" color="inherit" className={classes.grow}>
             React Demo
           </Typography>
 
-          <Button className={classes.button} color="inherit" href="/">
-            Countries
-          </Button>
+          <Link href="/">
+            <Button className={classes.button} color="inherit">
+              Countries
+            </Button>
+          </Link>
 
-          <Button className={classes.button} color="inherit" href="/rest">
-            Rest
-          </Button>
+          <Link href="/rest">
+            <Button className={classes.button} color="inherit">
+              Rest
+            </Button>
+          </Link>
+          <Link href="/both">
+            <Button className={classes.button} color="inherit">
+              Both
+            </Button>
+          </Link>
 
-          <Button className={classes.button} color="inherit" href="/clock">
-            Clock
-          </Button>
+          <Clock />
         </Toolbar>
       </AppBar>
     </div>

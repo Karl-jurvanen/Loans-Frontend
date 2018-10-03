@@ -7,7 +7,7 @@ interface ICountriesState {
   selected: any;
 }
 
-class CountriesRestApp extends React.Component<any, ICountriesState> {
+class CountriesRestApp extends React.Component<{}, ICountriesState> {
   constructor(props: any) {
     super(props);
 
@@ -35,7 +35,9 @@ class CountriesRestApp extends React.Component<any, ICountriesState> {
   public async componentDidMount() {
     console.log("inside componenDidMount");
 
-    const fetchedData = await fetch("https://restcountries.eu/rest/v2/all");
+    const fetchedData = await fetch(
+      "https://restcountries.eu/rest/v2/all?fields=name;capital;population;flag"
+    );
 
     const data = await fetchedData.json();
 

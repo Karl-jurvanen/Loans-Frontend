@@ -10,11 +10,11 @@ import { withStyles, createStyles } from "@material-ui/core/styles";
 const styles = createStyles({
   card: {
     maxHeight: 250,
-    maxWidth: 1000
+    maxWidth: 700
   },
   media: {
-    height: 140,
-  },
+    height: 140
+  }
 });
 
 function CountryRest(props) {
@@ -28,7 +28,7 @@ function CountryRest(props) {
         <CardContent>
           <Grid container spacing={40}>
             <Grid item xs={4}>
-              <CardMedia  component="img" image={props.country.flag} />
+              <CardMedia component="img" image={props.country.flag} />
             </Grid>
 
             <Grid item xs={8}>
