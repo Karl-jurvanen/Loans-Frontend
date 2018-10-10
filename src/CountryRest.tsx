@@ -1,12 +1,15 @@
 import * as React from "react";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
 import { withStyles, createStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Typography,
+  Grid,
+  Button
+} from "@material-ui/core";
+import Link from "next/link";
 
 const styles = createStyles({
   card: {
@@ -19,7 +22,7 @@ const styles = createStyles({
   button: {
     width: "100%",
     height: "100%"
-  },
+  }
 });
 
 function CountryRest(props) {
@@ -27,7 +30,7 @@ function CountryRest(props) {
   return (
     <Card className={classes.card}>
       <Grid container>
-        <Grid item xs = {10}>
+        <Grid item xs={10}>
           <CardActionArea
             onClick={() => props.selectCard()}
             style={{ width: "100%" }}
@@ -65,8 +68,10 @@ function CountryRest(props) {
             </CardContent>
           </CardActionArea>
         </Grid>
-        <Grid item xs = {2}>
-          <Button className={classes.button}>INFO</Button>
+        <Grid item xs={2}>
+          <Link href={{ pathname: "/country_info", query: { name: props.country.name } }}>
+            <Button className={classes.button}>INFO</Button>
+          </Link>
         </Grid>
       </Grid>
     </Card>

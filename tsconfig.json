@@ -24,6 +24,6 @@
     ]
   },
   "include": [
-    "src/**/*", "pages/App.ts"
+    "src/**/*", "pages/App.ts", "pages/country_info.tsx"
   ]
 }
