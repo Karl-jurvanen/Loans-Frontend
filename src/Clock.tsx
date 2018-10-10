@@ -1,16 +1,14 @@
 import * as React from "react";
-
+import { withStyles } from "@material-ui/core/styles";
 
 interface IProps {
-  offset:  number; 
+  offset: number;
 }
 
-
-class Clock extends React.Component< IProps, any> {
-  
+class Clock extends React.Component<IProps, any> {
   public static defaultProps: IProps = {
     offset: 0
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -44,4 +42,4 @@ class Clock extends React.Component< IProps, any> {
     this.setState({ time: time });
   }
 }
-export default Clock;
+export default  Clock;

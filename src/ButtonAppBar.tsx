@@ -16,15 +16,15 @@ const styles = theme => ({
     flexGrow: 1
   },
   button: {
-    margin: theme.spacing.unit
-  }
+    margin: theme.spacing.unit,
+    font: "Sans-serif"
+  },
 });
 
 function ButtonAppBar(props) {
   const { classes } = props;
   return (
     <div className={classes.root}>
-      {console.log()}
       <AppBar position="static" color="primary">
         <Toolbar>
           <Typography variant="title" color="inherit" className={classes.grow}>
@@ -47,8 +47,9 @@ function ButtonAppBar(props) {
               Both
             </Button>
           </Link>
-
-          <Clock />
+          <div className={classes.button} color="inherit">
+            <Clock />
+          </div>
         </Toolbar>
       </AppBar>
     </div>
