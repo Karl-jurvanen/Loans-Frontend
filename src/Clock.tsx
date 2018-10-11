@@ -2,12 +2,14 @@ import * as React from "react";
 import { withStyles } from "@material-ui/core/styles";
 
 interface IProps {
-  offset: number;
+  offset: number,
+  classes: any
 }
 
 class Clock extends React.Component<IProps, any> {
   public static defaultProps: IProps = {
-    offset: 0
+    offset: 0,
+    classes: {}
   };
 
   constructor(props) {
@@ -18,11 +20,12 @@ class Clock extends React.Component<IProps, any> {
   }
 
   render() {
+    const { classes } = this.props;
     return (
-      <div>
-        {this.state.time.getHours() + ":"}
-        {this.state.time.getMinutes() + ":"}
-        {this.state.time.getSeconds()}
+      <div >
+        {this.state.time.getHours()  + ":"}
+        {(this.state.time.getMinutes() < 10 ? "0" + this.state.time.getMinutes() : this.state.time.getMinutes()) + ":"}
+        {this.state.time.getSeconds() < 10 ? "0" + this.state.time.getSeconds() : this.state.time.getSeconds()}
       </div>
     );
   }

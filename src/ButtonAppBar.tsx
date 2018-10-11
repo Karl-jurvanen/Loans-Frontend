@@ -16,9 +16,8 @@ const styles = theme => ({
     flexGrow: 1
   },
   button: {
-    margin: theme.spacing.unit,
-    font: "Sans-serif"
-  },
+    margin: theme.spacing.unit
+  }
 });
 
 function ButtonAppBar(props) {
@@ -32,24 +31,18 @@ function ButtonAppBar(props) {
           </Typography>
 
           <Link href="/">
-            <Button className={classes.button} color="inherit">
-              Countries
-            </Button>
+            <Button color="inherit">Countries</Button>
           </Link>
 
           <Link href="/rest">
-            <Button className={classes.button} color="inherit">
-              Rest
-            </Button>
+            <Button color="inherit">Rest</Button>
           </Link>
           <Link href="/both">
-            <Button className={classes.button} color="inherit">
-              Both
-            </Button>
+            <Button color="inherit">Both</Button>
           </Link>
-          <div className={classes.button} color="inherit">
+          <Button disableRipple disableFocusRipple color="inherit">
             <Clock />
-          </div>
+          </Button>
         </Toolbar>
       </AppBar>
     </div>
