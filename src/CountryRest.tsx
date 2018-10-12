@@ -43,7 +43,7 @@ function CountryRest(props) {
           >
             <CardContent>
               <Grid container spacing={40}>
-                <Grid xs={12}>
+                <Grid item xs={12}>
                   <Typography color="textSecondary">
                     {props.country.ID}
                   </Typography>

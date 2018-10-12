@@ -36,7 +36,7 @@ class CountriesRestApp extends React.Component<{}, ICountriesState> {
     console.log("inside componenDidMount");
 
     const fetchedData = await fetch(
-      "https://restcountries.eu/rest/v2/all?fields=name;capital;population;flag"
+      "https://restcountries.eu/rest/v2/all?fields=name;capital;population;flag;subregion"
     );
 
     const data = await fetchedData.json();

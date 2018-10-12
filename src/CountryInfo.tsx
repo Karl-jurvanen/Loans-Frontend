@@ -1,23 +1,20 @@
 import Router from "next/router";
 import * as React from "react";
 import Link from "next/link";
-
-import {
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Typography,
-  Grid,
-  Button
-} from "@material-ui/core";
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import { Typography, Grid, Button } from "@material-ui/core";
 
 class CountryInfo extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
 
     this.state = {
-      country: ["testitem"]
+      country: {
+        currencies: []
+      }
     };
   }
 
@@ -39,27 +36,51 @@ class CountryInfo extends React.Component<any, any> {
 
   render() {
     return (
-      <Card >
+      <Card>
         <CardContent>
           <Grid container spacing={40}>
             <Grid item sm={5} xs={12}>
               <CardMedia component="img" image={this.state.country.flag} />
             </Grid>
             <Grid item sm={5} xs={8}>
-              <Typography variant="headline" component="h2">
+              <Typography variant="display1" component="h2">
                 {this.state.country.name}
               </Typography>
-              <Typography variant="headline" component="h2">
-                {this.state.country.nativeName}
+
+              {this.state.country.name !== this.state.country.nativeName ? (
+                <Typography variant="display1" component="h2">
+                  {this.state.country.nativeName}
+                </Typography>
+              ) : (
+                <React.Fragment />
+              )}
+
+              <Typography color="textSecondary" style={{ paddingTop: 5 }}>
+                {"Capital: " + this.state.country.capital}
               </Typography>
 
-                {console.log(this.state.country)}
+              <Typography color="textSecondary">
+                {"Population: " + this.state.country.population}
+              </Typography>
 
+              {console.log(this.state.country)}
+              {console.log(this.state.country.currencies)}
+
+              <Typography variant="caption" style={{ paddingTop: 5 }}>
+                Currencies
+              </Typography>
+              {this.state.country.currencies.map(item => (
+                <Typography key={item} variant="body1" color="textSecondary">
+                  {item.name}
+                </Typography>
+              ))}
             </Grid>
 
-            <Grid item sm = {2} xs={4}>
+            <Grid item sm={2} xs={4}>
               <Link href="/rest">
-                <Button color="primary" style={{ width: "100%" }}>Back</Button>
+                <Button color="primary" style={{ width: "100%" }}>
+                  Back
+                </Button>
               </Link>
             </Grid>
           </Grid>
