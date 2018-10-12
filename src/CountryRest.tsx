@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { Fragment } from "react";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import {
   Card,
@@ -9,11 +9,12 @@ import {
   Grid,
   Button
 } from "@material-ui/core";
+
+import withWidth from "@material-ui/core/withWidth";
 import Link from "next/link";
 
 const styles = createStyles({
   card: {
-    maxHeight: 250,
     maxWidth: 700
   },
   media: {
@@ -22,26 +23,27 @@ const styles = createStyles({
   button: {
     width: "100%",
     height: "100%"
+  },
+  flag: {
+    visibility: "visible"
   }
 });
 
 function CountryRest(props) {
   const { classes } = props;
+  const { width } = props;
+
   return (
     <Card className={classes.card}>
       <Grid container>
-        <Grid item xs={10}>
+        <Grid item sm={10} xs={12}>
           <CardActionArea
             onClick={() => props.selectCard()}
-            style={{ width: "100%" }}
+            style={{ width: "100%", padding: 10 }}
           >
             <CardContent>
               <Grid container spacing={40}>
-                <Grid item xs={4}>
-                  <CardMedia component="img" image={props.country.flag} />
-                </Grid>
-
-                <Grid item xs={6}>
+                <Grid xs={12}>
                   <Typography color="textSecondary">
                     {props.country.ID}
                   </Typography>
@@ -62,14 +64,17 @@ function CountryRest(props) {
                     {"Region: " + props.country.subregion}
                   </Typography>
                 </Grid>
-
-                <Grid item xs={2} />
               </Grid>
             </CardContent>
           </CardActionArea>
         </Grid>
-        <Grid item xs={2}>
-          <Link href={{ pathname: "/country_info", query: { name: props.country.name } }}>
+        <Grid item sm={2} xs={12}>
+          <Link
+            href={{
+              pathname: "/country_info",
+              query: { name: props.country.name }
+            }}
+          >
             <Button className={classes.button}>INFO</Button>
           </Link>
         </Grid>
@@ -78,4 +83,4 @@ function CountryRest(props) {
   );
 }
 
-export default withStyles(styles)(CountryRest);
+export default withStyles(styles)(withWidth()(CountryRest));
