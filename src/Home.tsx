@@ -1,14 +1,13 @@
 import * as React from "react";
-import CountriesApp from "./CountriesApp";
-import ButtonAppbar from "./ButtonAppBar";
 import Paper from "@material-ui/core/Paper";
 import { withStyles } from "@material-ui/core/styles";
+import ButtonAppBar from "./ButtonAppBar";
 
 class Home extends React.Component<any, any> {
   render() {
     return (
       <div className="root">
-        <ButtonAppbar />
+      <ButtonAppBar/>
         {this.props.children}
       </div>
     );

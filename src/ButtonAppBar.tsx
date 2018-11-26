@@ -6,7 +6,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Link from "next/link";
-import Clock from "../src/Clock";
+import { IconButton } from "@material-ui/core";
+import MenuIcon from '@material-ui/icons/Menu'
 
 const styles = theme => ({
   root: {
@@ -16,7 +17,11 @@ const styles = theme => ({
     flexGrow: 1
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing.unit
+  },
+  menuButton: {
+    marginLeft: -12,
+    marginRight: 20
   }
 });
 
@@ -26,23 +31,16 @@ function ButtonAppBar(props) {
     <div className={classes.root}>
       <AppBar position="static" color="primary">
         <Toolbar>
+          <IconButton className={classes.menuButton} color="inherit">
+            <MenuIcon/>
+          </IconButton>
           <Typography variant="title" color="inherit" className={classes.grow}>
             React Demo
           </Typography>
 
           <Link href="/">
-            <Button color="inherit">Countries</Button>
+            <Button color="inherit">Login</Button>
           </Link>
-
-          <Link href="/rest">
-            <Button color="inherit">Rest</Button>
-          </Link>
-          <Link href="/both">
-            <Button color="inherit">Both</Button>
-          </Link>
-          <Button disableRipple disableFocusRipple color="inherit">
-            <Clock />
-          </Button>
         </Toolbar>
       </AppBar>
     </div>
