@@ -1,5 +1,6 @@
 import * as React from "react";
 import Grid from "@material-ui/core/Grid";
+import { withStyles, createStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -17,7 +18,25 @@ interface IUsersState {
   ];
 }
 
-class Users extends React.Component<{}, IUsersState> {
+interface IUsersProps {
+  classes: {
+    root: string;
+    table: string;
+  };
+}
+
+const styles = theme => createStyles({
+  root: {
+    width: "100%",
+    marginTop: theme.spacing.unit * 3,
+    overflowX: "auto"
+  },
+  table: {
+    minWidth: 700
+  }
+});
+
+class Users extends React.Component<IUsersProps, IUsersState> {
   constructor(props: any) {
     super(props);
 
@@ -36,8 +55,10 @@ class Users extends React.Component<{}, IUsersState> {
   }
 
   render() {
+    const { classes } = this.props;
+
     return (
-      <Paper>
+      <Paper className={classes.root}>
         <Table>
           <TableHead>
             <TableRow>
@@ -63,4 +84,4 @@ class Users extends React.Component<{}, IUsersState> {
   }
 }
 
-export default Users;
+export default withStyles(styles)(Users);
