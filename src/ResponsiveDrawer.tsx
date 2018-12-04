@@ -18,6 +18,7 @@ import {
 import UserIcon from "@material-ui/icons/AccountBoxOutlined";
 import EquipmentIcon from "@material-ui/icons/Devices";
 import LoanIcon from "@material-ui/icons/CheckBoxOutlined";
+import Link from "next/link";
 
 const drawerWidth = 240;
 
@@ -100,18 +101,30 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
       <div className={classes.list}>
         <List>
           {["Users", "Equipment", "Loans"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
+            <Link
+              key={text}
+              href={
                 {
+                  // switch statement that resolves link paths
+                  0: "users",
+                  1: "equipment",
+                  2: "loans",
+                }[index]
+              }
+            >
+              <ListItem button>
+                <ListItemIcon>
                   {
-                    0: <UserIcon />,
-                    1: <EquipmentIcon />,
-                    2: <LoanIcon />
-                  }[index]
-                }
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
+                    {
+                      0: <UserIcon />,
+                      1: <EquipmentIcon />,
+                      2: <LoanIcon />
+                    }[index]
+                  }
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            </Link>
           ))}
         </List>
       </div>
