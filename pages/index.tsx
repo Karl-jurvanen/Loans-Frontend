@@ -5,7 +5,7 @@ import { Typography } from "@material-ui/core";
 import Users from '../src/Users'
 
 export default () => (
-  <Home>
+  <Home page="Users">
     <Users></Users>
   </Home>
 );
