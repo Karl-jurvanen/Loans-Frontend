@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { withStyles, createStyles, withTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -10,14 +9,15 @@ import IconButton from "@material-ui/core/IconButton";
 import Hidden from "@material-ui/core/Hidden";
 import Divider from "@material-ui/core/Divider";
 import MenuIcon from "@material-ui/icons/Menu";
-import { ListItemIcon, ListItem, ListItemText } from "@material-ui/core";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import {
+  ListItemIcon,
+  ListItem,
+  ListItemText,
+  CssBaseline
+} from "@material-ui/core";
 import UserIcon from "@material-ui/icons/AccountBoxOutlined";
 import EquipmentIcon from "@material-ui/icons/Devices";
 import LoanIcon from "@material-ui/icons/CheckBoxOutlined";
-
-import Users from "./Users";
 
 const drawerWidth = 240;
 
@@ -25,7 +25,7 @@ const styles = theme =>
   createStyles({
     root: {
       flexGrow: 1,
-      height: 440,
+      height: "100%",
       zIndex: 1,
       overflow: "hidden",
       position: "relative",
@@ -34,7 +34,7 @@ const styles = theme =>
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
-      outerHeight: 100
+      position: "fixed"
     },
     navIconHide: {
       [theme.breakpoints.up("md")]: {
@@ -45,18 +45,23 @@ const styles = theme =>
     drawerPaper: {
       width: drawerWidth,
       [theme.breakpoints.up("md")]: {
-        position: "relative",
-        top: 60
+        paddingTop: 64
       },
+
       height: "100%"
+    },
+    drawer: {
+      position: "relative",
+      width: drawerWidth
     },
     content: {
       flexGrow: 1,
       backgroundColor: theme.palette.background.default,
-      padding: theme.spacing.unit * 1
+      padding: theme.spacing.unit * 1,
+      minWidth: 0 // So the Typography noWrap works
     },
     list: {
-      width: "100%"
+      width: "auto"
     }
   });
 
@@ -68,6 +73,7 @@ interface IDrawerProps {
     navIconHide: any;
     toolbar: any;
     drawerPaper: any;
+    drawer: any;
     content: any;
     list: any;
   };
@@ -113,6 +119,7 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
 
     return (
       <div className={classes.root}>
+        <CssBaseline />
         <AppBar className={classes.appBar}>
           <Toolbar>
             <IconButton
@@ -149,6 +156,7 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
             variant="permanent"
             open
             classes={{
+              docked: classes.drawer,
               paper: classes.drawerPaper
             }}
           >
