@@ -6,19 +6,27 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import { Icon, Tooltip } from "@material-ui/core";
+import ErrorIcon from "@material-ui/icons/ErrorOutline";
+import ReturnedIcon from "@material-ui/icons/CheckBoxOutlined";
+
+interface ILoan {
+  id: number;
+  deviceId: number;
+  code: string;
+  name: string;
+  info: string;
+  begins: string;
+  ends: string;
+  timeReturned: string;
+  loanerId: string;
+  loanerFirstName: string;
+  loanerLastName: string;
+  returned: boolean;
+}
 
 interface ILoansState {
-  data: [
-    {
-      id: number;
-      deviceId: number;
-      code: string;
-      name: string;
-      info: string;
-      begins: string;
-      ends: string;
-    }
-  ];
+  data: [ILoan];
 }
 
 interface ILoansProps {
@@ -45,7 +53,20 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
 
     this.state = {
       data: [
-        { id: null, deviceId: null, code: "", name: "", info: "", begins: "", ends: "" }
+        {
+          id: null,
+          deviceId: null,
+          code: "",
+          name: "",
+          info: "",
+          begins: "",
+          ends: "",
+          timeReturned: "",
+          loanerId: null,
+          loanerFirstName: "",
+          loanerLastName: "",
+          returned: null
+        }
       ]
     };
   }
@@ -55,7 +76,12 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
 
     const data = await fetchedData.json();
 
+    data.forEach(element => {
+      element.returned = element.timeReturned === null ? true : false;
+    });
+
     this.setState({ data });
+    console.log(this.state.data);
   }
 
   pad(n) {
@@ -63,13 +89,12 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
   }
   parsedate(timestamp: string) {
     //make sure that empty timestamp does not output NaNs
-    if (timestamp === "") {
+    if (timestamp === "" || timestamp === null) {
       return "";
     }
 
     let date = new Date(timestamp);
-    console.log("date");
-    console.log(date.getHours() + " " + date.getMinutes());
+
     let output =
       this.pad(date.getDate()) +
       "." +
@@ -83,6 +108,16 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
     return output;
   }
 
+  checkLate(item: ILoan) {
+    let date = new Date(item.ends);
+    if (date.getTime() < new Date().getTime() && item.timeReturned === null) {
+      console.log("late");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -91,23 +126,38 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>id</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Info</TableCell>
+              <TableCell />
+              <TableCell>Device id</TableCell>
+              <TableCell>Device Name</TableCell>
+              <TableCell>Loaner</TableCell>
               <TableCell>Begins</TableCell>
               <TableCell>Ends</TableCell>
-
+              <TableCell>Returned</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {this.state.data.map(row => {
               return (
                 <TableRow key={row.id}>
-                  <TableCell>{row.id}</TableCell>
+                  <TableCell>
+                    {row.timeReturned !== null ? (
+                      <Tooltip title="Returned">
+                        <ReturnedIcon style={{ color: "green" }} />
+                      </Tooltip>
+                    ) : this.checkLate(row) ? (
+                      <Tooltip title="Late">
+                        <ErrorIcon color="error" />
+                      </Tooltip>
+                    ) : null}
+                  </TableCell>
+                  <TableCell>{row.code}</TableCell>
                   <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.info}</TableCell>
+                  <TableCell>
+                    {row.loanerFirstName + " " + row.loanerLastName}
+                  </TableCell>
                   <TableCell>{this.parsedate(row.begins)}</TableCell>
                   <TableCell>{this.parsedate(row.ends)}</TableCell>
+                  <TableCell>{this.parsedate(row.timeReturned)}</TableCell>
                 </TableRow>
               );
             })}
