@@ -11,6 +11,7 @@ interface IEquipmentState {
   data: [
     {
       id: number;
+      code: number;
       name: string;
       info: string;
     }
@@ -40,7 +41,7 @@ class Equipment extends React.Component<IEquipmentProps, IEquipmentState> {
     super(props);
 
     this.state = {
-      data: [{ id: null, name: "", info: "" }]
+      data: [{ id: null, name: "", info: "", code: null }]
     };
   }
 
@@ -60,7 +61,7 @@ class Equipment extends React.Component<IEquipmentProps, IEquipmentState> {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>id</TableCell>
+              <TableCell>Device id</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Info</TableCell>
             </TableRow>
@@ -69,7 +70,7 @@ class Equipment extends React.Component<IEquipmentProps, IEquipmentState> {
             {this.state.data.map(row => {
               return (
                 <TableRow key={row.id}>
-                  <TableCell>{row.id}</TableCell>
+                  <TableCell>{row.code}</TableCell>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>{row.info}</TableCell>
                 </TableRow>

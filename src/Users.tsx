@@ -14,6 +14,8 @@ interface IUsersState {
       id: number;
       firstName: string;
       lastName: string;
+      email: string;
+      role: string;
     }
   ];
 }
@@ -25,22 +27,23 @@ interface IUsersProps {
   };
 }
 
-const styles = theme => createStyles({
-  root: {
-    width: "100%",
-    overflowX: "auto"
-  },
-  table: {
-    minWidth: 700
-  }
-});
+const styles = theme =>
+  createStyles({
+    root: {
+      width: "100%",
+      overflowX: "auto"
+    },
+    table: {
+      minWidth: 700
+    }
+  });
 
 class Users extends React.Component<IUsersProps, IUsersState> {
   constructor(props: any) {
     super(props);
 
     this.state = {
-      data: [{ id: null, firstName: "", lastName: "" }]
+      data: [{ id: null, firstName: "", lastName: "", email: "", role: "" }]
     };
   }
 
@@ -64,6 +67,8 @@ class Users extends React.Component<IUsersProps, IUsersState> {
               <TableCell>id</TableCell>
               <TableCell>First Name</TableCell>
               <TableCell>Last Name</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Role</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -73,6 +78,8 @@ class Users extends React.Component<IUsersProps, IUsersState> {
                   <TableCell>{row.id}</TableCell>
                   <TableCell>{row.firstName}</TableCell>
                   <TableCell>{row.lastName}</TableCell>
+                  <TableCell>{row.email}</TableCell>
+                  <TableCell>{row.role}</TableCell>
                 </TableRow>
               );
             })}
