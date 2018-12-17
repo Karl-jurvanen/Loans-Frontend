@@ -6,7 +6,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import { Icon, Tooltip } from "@material-ui/core";
+import { Tooltip } from "@material-ui/core";
 import ErrorIcon from "@material-ui/icons/ErrorOutline";
 import ReturnedIcon from "@material-ui/icons/CheckBoxOutlined";
 
@@ -94,6 +94,7 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
     }
 
     let date = new Date(timestamp);
+    console.log(date.toISOString().slice(0,19).replace('T', ' '))
 
     let output =
       this.pad(date.getDate()) +
@@ -127,6 +128,7 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
           <TableHead>
             <TableRow>
               <TableCell />
+              <TableCell>id</TableCell>
               <TableCell>Device id</TableCell>
               <TableCell>Device Name</TableCell>
               <TableCell>Loaner</TableCell>
@@ -150,6 +152,7 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
                       </Tooltip>
                     ) : null}
                   </TableCell>
+                  <TableCell>{row.id}</TableCell>
                   <TableCell>{row.code}</TableCell>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>
