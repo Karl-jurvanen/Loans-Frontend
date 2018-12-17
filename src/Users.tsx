@@ -7,6 +7,8 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import UserContext from './UserContext'
+import { Typography } from "@material-ui/core";
 
 interface IUsersState {
   data: [
@@ -58,9 +60,20 @@ class Users extends React.Component<IUsersProps, IUsersState> {
 
   render() {
     const { classes } = this.props;
+    let value = this.context;
 
     return (
       <Paper className={classes.root}>
+
+      <UserContext.Consumer>
+      {(context) => (
+        <div>
+          {context.id}
+          {context.name}
+
+        </div>
+      )}
+      </UserContext.Consumer>
         <Table>
           <TableHead>
             <TableRow>
