@@ -1,15 +1,13 @@
 import * as React from "react";
-import CountriesApp from "./CountriesApp";
-import ButtonAppbar from "./ButtonAppBar";
 import Paper from "@material-ui/core/Paper";
 import { withStyles } from "@material-ui/core/styles";
+import ResponsiveDrawer from "./ResponsiveDrawer";
 
 class Home extends React.Component<any, any> {
   render() {
     return (
       <div className="root">
-        <ButtonAppbar />
-        {this.props.children}
+        <ResponsiveDrawer page={this.props.page}>{this.props.children}</ResponsiveDrawer>
       </div>
     );
   }
