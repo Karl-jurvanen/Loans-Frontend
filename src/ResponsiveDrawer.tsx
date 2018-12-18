@@ -85,6 +85,21 @@ interface IDrawerState {
   mobileOpen: boolean;
 }
 
+const listItems = [
+  {
+    icon: <UserIcon />,
+    text: "Users"
+  },
+  {
+    icon: <EquipmentIcon />,
+    text: "Equipment"
+  },
+  {
+    icon: <LoanIcon />,
+    text: "Loans"
+  }
+];
+
 class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
   state = {
     mobileOpen: false
@@ -100,29 +115,11 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
     const sideList = (
       <div className={classes.list}>
         <List>
-          {["Users", "Equipment", "Loans"].map((text, index) => (
-            <Link
-              key={text}
-              href={
-                {
-                  // switch statement that resolves link paths
-                  0: "users",
-                  1: "equipment",
-                  2: "loans",
-                }[index]
-              }
-            >
+          {listItems.map(item => (
+            <Link key={item.text} href={item.text.toLowerCase()}>
               <ListItem button>
-                <ListItemIcon>
-                  {
-                    {
-                      0: <UserIcon />,
-                      1: <EquipmentIcon />,
-                      2: <LoanIcon />
-                    }[index]
-                  }
-                </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
               </ListItem>
             </Link>
           ))}
