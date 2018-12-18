@@ -82,7 +82,6 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
     });
 
     this.setState({ data });
-    console.log(this.state.data);
   }
 
   pad(n) {
@@ -95,8 +94,6 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
     }
 
     let date = new Date(timestamp);
-    console.log(date.toISOString().slice(0,19).replace('T', ' '))
-
     let output =
       this.pad(date.getDate()) +
       "." +
@@ -113,7 +110,6 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
   checkLate(item: ILoan) {
     let date = new Date(item.ends);
     if (date.getTime() < new Date().getTime() && item.timeReturned === null) {
-      console.log("late");
       return true;
     } else {
       return false;
