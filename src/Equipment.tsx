@@ -6,6 +6,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import ApiPath from './ApiPath'
 
 interface IEquipmentState {
   data: [
@@ -46,7 +47,7 @@ class Equipment extends React.Component<IEquipmentProps, IEquipmentState> {
   }
 
   public async componentDidMount() {
-    const fetchedData = await fetch("http://localhost:9000/api/v1/equipment");
+    const fetchedData = await fetch(`${ApiPath}/equipment`);
 
     const data = await fetchedData.json();
 
