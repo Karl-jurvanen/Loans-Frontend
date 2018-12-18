@@ -19,6 +19,10 @@ import UserIcon from "@material-ui/icons/AccountBoxOutlined";
 import EquipmentIcon from "@material-ui/icons/Devices";
 import LoanIcon from "@material-ui/icons/CheckBoxOutlined";
 import Link from "next/link";
+import Button from "@material-ui/core/Button";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import UserContext from "./UserContext";
+import Router from "next/router";
 
 const drawerWidth = 240;
 
@@ -35,7 +39,11 @@ const styles = theme =>
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
-      position: "fixed"
+      position: "fixed",
+      flexGrow: 1
+    },
+    grow: {
+      flexGrow: 1
     },
     navIconHide: {
       [theme.breakpoints.up("md")]: {
@@ -71,6 +79,7 @@ interface IDrawerProps {
   classes: {
     root: any;
     appBar: any;
+    grow: any;
     navIconHide: any;
     toolbar: any;
     drawerPaper: any;
@@ -108,10 +117,12 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
   handleDrawerToggle = () => {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
   };
+  reroute = () => {
+    Router.push("/login");
+  };
 
   render() {
     const { classes } = this.props;
-
     const sideList = (
       <div className={classes.list}>
         <List>
@@ -123,6 +134,33 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
               </ListItem>
             </Link>
           ))}
+          <UserContext.Consumer>
+            {context =>
+              context.id === null ? (
+                <Link href="/login">
+                  <ListItem button>
+                    <ListItemIcon>
+                      <AccountCircle />
+                    </ListItemIcon>
+                    <ListItemText primary="Login" />
+                  </ListItem>
+                </Link>
+              ) : (
+                <ListItem
+                  button
+                  onClick={() => {
+                    localStorage.removeItem("jwt");
+                    this.reroute();
+                  }}
+                >
+                  <ListItemIcon>
+                    <AccountCircle />
+                  </ListItemIcon>
+                  <ListItemText primary="Logout" />
+                </ListItem>
+              )
+            }
+          </UserContext.Consumer>
         </List>
       </div>
     );
@@ -130,7 +168,7 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
     return (
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar className={classes.appBar}>
+        <AppBar className={classes.appBar} position="static">
           <Toolbar>
             <IconButton
               color="inherit"
@@ -140,9 +178,27 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="title" color="inherit" noWrap>
+            <Typography
+              variant="title"
+              color="inherit"
+              className={classes.grow}
+            >
               {this.props.page}
             </Typography>
+            <UserContext.Consumer>
+              {context => (
+                (context.id !== null) && (
+                  <Link href="/profile">
+                    <IconButton color="inherit">
+                      <AccountCircle />
+                    </IconButton>
+                  </Link>
+                )
+              )
+
+              }
+            </UserContext.Consumer>
+            
           </Toolbar>
         </AppBar>
         <Hidden mdUp>
