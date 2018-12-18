@@ -5,12 +5,12 @@ import Grid from "@material-ui/core/Grid";
 import FormLabel from "@material-ui/core/FormLabel";
 import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-
+import Router from 'next/router'
 const styles = theme =>
   createStyles({
     root: {
       width: "100%",
-      maxWidth: 700
+      
     }
   });
 
@@ -57,9 +57,13 @@ class Login extends React.Component<any, any> {
       .then(res => {
         localStorage.setItem("jwt", res.token);
         console.log(res);
+        this.reroute();
       })
       .catch(error => console.error("Error:", error));
   }
+
+  reroute = () => {Router.push('/users')}
+
   render() {
     const { classes } = this.props;
 
