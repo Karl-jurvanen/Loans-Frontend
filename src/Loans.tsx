@@ -9,6 +9,7 @@ import TableRow from "@material-ui/core/TableRow";
 import { Tooltip } from "@material-ui/core";
 import ErrorIcon from "@material-ui/icons/ErrorOutline";
 import ReturnedIcon from "@material-ui/icons/CheckBoxOutlined";
+import ApiPath from './ApiPath'
 
 interface ILoan {
   id: number;
@@ -72,7 +73,7 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
   }
 
   public async componentDidMount() {
-    const fetchedData = await fetch("http://localhost:9000/api/v1/loans");
+    const fetchedData = await fetch(`${ApiPath}/loans`);
 
     const data = await fetchedData.json();
 

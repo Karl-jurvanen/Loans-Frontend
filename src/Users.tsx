@@ -7,6 +7,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import ApiPath from './ApiPath'
 
 interface IUsersState {
   data: [
@@ -48,7 +49,7 @@ class Users extends React.Component<IUsersProps, IUsersState> {
   }
 
   public async componentDidMount() {
-    const fetchedData = await fetch("http://localhost:9000/api/v1/users");
+    const fetchedData = await fetch(`${ApiPath}/users`);
 
     const data = await fetchedData.json();
 
