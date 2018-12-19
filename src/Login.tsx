@@ -37,7 +37,7 @@ class Login extends React.Component<any, any> {
     event.preventDefault();
     this.setState({ error: "" });
 
-    await fetch(`${ApiPath}/users`, {
+    await fetch(`${ApiPath}/login`, {
       method: "post",
       headers: {
         Accept: "application/json, text/plain, */*",
