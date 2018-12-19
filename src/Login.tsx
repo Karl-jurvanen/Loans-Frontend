@@ -7,6 +7,8 @@ import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Router from "next/router";
 import TextField from "@material-ui/core/TextField";
+import ApiPath from "./ApiPath";
+
 const styles = theme =>
   createStyles({
     root: {
@@ -35,7 +37,7 @@ class Login extends React.Component<any, any> {
     event.preventDefault();
     this.setState({ error: "" });
 
-    await fetch("http://localhost:9000/api/v1/login", {
+    await fetch(`${ApiPath}/users`, {
       method: "post",
       headers: {
         Accept: "application/json, text/plain, */*",
