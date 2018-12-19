@@ -9,7 +9,9 @@ import TableRow from "@material-ui/core/TableRow";
 import { Tooltip } from "@material-ui/core";
 import ErrorIcon from "@material-ui/icons/ErrorOutline";
 import ReturnedIcon from "@material-ui/icons/CheckBoxOutlined";
-import ApiPath from './ApiPath'
+import ApiPath from "./ApiPath";
+import { getJwt, reroute } from "./helpers/jwt";
+import Router from "next/router";
 
 interface ILoan {
   id: number;
@@ -73,15 +75,27 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
   }
 
   public async componentDidMount() {
-    const fetchedData = await fetch(`${ApiPath}/loans`);
-
-    const data = await fetchedData.json();
-
-    data.forEach(element => {
-      element.returned = element.timeReturned === null ? true : false;
+    const fetchedData = await fetch(`${ApiPath}/loans`, {
+      method: "get",
+      headers: {
+        Authorization: `Bearer ${getJwt()}`,
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json"
+      }
     });
+    // this token is invalid, remove it and redirect to login
+    if (fetchedData.status === 401) {
+      localStorage.removeItem("jwt");
+      console.log("401");
+      reroute("/login");
+    } else {
+      const data = await fetchedData.json();
 
-    this.setState({ data });
+      data.forEach(element => {
+        element.returned = element.timeReturned === null ? true : false;
+      });
+      this.setState({ data });
+    }
   }
 
   pad(n) {

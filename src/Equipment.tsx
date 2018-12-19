@@ -6,7 +6,8 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import ApiPath from './ApiPath'
+import ApiPath from "./ApiPath";
+import { getJwt, reroute } from "./helpers/jwt";
 
 interface IEquipmentState {
   data: [
@@ -47,11 +48,24 @@ class Equipment extends React.Component<IEquipmentProps, IEquipmentState> {
   }
 
   public async componentDidMount() {
-    const fetchedData = await fetch(`${ApiPath}/equipment`);
+    const fetchedData = await fetch(`${ApiPath}/equipment`, {
+      method: "get",
+      headers: {
+        Authorization: `Bearer ${getJwt()}`,
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json"
+      }
+    });
+    // this token is invalid, remove it and redirect to login
+    if (fetchedData.status === 401) {
+      localStorage.removeItem("jwt");
+      console.log("401");
+      reroute("/login");
+    } else {
+      const data = await fetchedData.json();
 
-    const data = await fetchedData.json();
-
-    this.setState({ data });
+      this.setState({ data });
+    }
   }
 
   render() {

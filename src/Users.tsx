@@ -7,8 +7,10 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import ApiPath from './ApiPath'
-import UserContext from './UserContext'
+import ApiPath from "./ApiPath";
+import UserContext from "./UserContext";
+import { getJwt, reroute } from "./helpers/jwt";
+
 interface IUsersState {
   data: [
     {
@@ -49,12 +51,25 @@ class Users extends React.Component<IUsersProps, IUsersState> {
   }
 
   public async componentDidMount() {
-    const fetchedData = await fetch(`${ApiPath}/users`);
+    const fetchedData = await fetch(`${ApiPath}/users`, {
+      method: "get",
+      headers: {
+        Authorization: `Bearer ${getJwt()}`,
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json"
+      }
+    });
+    // this token is invalid, remove it and redirect to login
 
-    const data = await fetchedData.json();
+    if (fetchedData.status === 401) {
+      localStorage.removeItem("jwt");
+      console.log("401");
+      reroute("/login");
+    } else {
+      const data = await fetchedData.json();
 
-    this.setState({ data });
-    console.log(this.state);
+      this.setState({ data });
+    }
   }
 
   render() {
@@ -63,16 +78,14 @@ class Users extends React.Component<IUsersProps, IUsersState> {
 
     return (
       <Paper className={classes.root}>
-
-      <UserContext.Consumer>
-      {(context) => (
-        <div>
-          {context.id}
-          {context.name}
-
-        </div>
-      )}
-      </UserContext.Consumer>
+        <UserContext.Consumer>
+          {context => (
+            <div>
+              {context.id}
+              {context.name}
+            </div>
+          )}
+        </UserContext.Consumer>
         <Table>
           <TableHead>
             <TableRow>
