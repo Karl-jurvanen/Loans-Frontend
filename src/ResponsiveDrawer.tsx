@@ -7,7 +7,6 @@ import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Hidden from "@material-ui/core/Hidden";
-import Divider from "@material-ui/core/Divider";
 import MenuIcon from "@material-ui/icons/Menu";
 import {
   ListItemIcon,
@@ -19,9 +18,9 @@ import UserIcon from "@material-ui/icons/AccountBoxOutlined";
 import EquipmentIcon from "@material-ui/icons/Devices";
 import LoanIcon from "@material-ui/icons/CheckBoxOutlined";
 import Link from "next/link";
-import Button from "@material-ui/core/Button";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import UserContext from "./UserContext";
+import { reroute } from "./helpers/jwt";
 import Router from "next/router";
 
 const drawerWidth = 240;
@@ -118,26 +117,26 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
   handleDrawerToggle = () => {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
   };
-  reroute = () => {
-    Router.push("/login");
-  };
 
   render() {
     const { classes } = this.props;
     const sideList = (
       <div className={classes.list}>
-        <List>
-          {listItems.map(item => (
-            <Link key={item.text} href={item.text.toLowerCase()}>
-              <ListItem button>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItem>
-            </Link>
-          ))}
-          <UserContext.Consumer>
-            {context =>
-              context.id === null ? (
+        <UserContext.Consumer>
+          {context => (
+            <List>
+              {// context.id is null if user is not logged in
+              // render only login link if not logged in
+              context.id !== null &&
+                listItems.map(item => (
+                  <Link key={item.text} href={item.text.toLowerCase()}>
+                    <ListItem button>
+                      <ListItemIcon>{item.icon}</ListItemIcon>
+                      <ListItemText primary={item.text} />
+                    </ListItem>
+                  </Link>
+                ))}
+              {context.id === null ? (
                 <Link href="/login">
                   <ListItem button>
                     <ListItemIcon>
@@ -151,7 +150,7 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
                   button
                   onClick={() => {
                     localStorage.removeItem("jwt");
-                    this.reroute();
+                    reroute("/login")
                   }}
                 >
                   <ListItemIcon>
@@ -159,10 +158,10 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
                   </ListItemIcon>
                   <ListItemText primary="Logout" />
                 </ListItem>
-              )
-            }
-          </UserContext.Consumer>
-        </List>
+              )}
+            </List>
+          )}
+        </UserContext.Consumer>
       </div>
     );
 
