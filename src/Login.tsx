@@ -5,12 +5,14 @@ import Grid from "@material-ui/core/Grid";
 import FormLabel from "@material-ui/core/FormLabel";
 import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import Router from 'next/router'
+import Router from "next/router";
+import TextField from "@material-ui/core/TextField";
 const styles = theme =>
   createStyles({
     root: {
+      flexWrap: "wrap",
       width: "100%",
-      
+      minWidth: "500",
     }
   });
 
@@ -62,7 +64,9 @@ class Login extends React.Component<any, any> {
       .catch(error => console.error("Error:", error));
   }
 
-  reroute = () => {Router.push('/users')}
+  reroute = () => {
+    Router.push("/users");
+  };
 
   render() {
     const { classes } = this.props;
@@ -80,23 +84,27 @@ class Login extends React.Component<any, any> {
             <Grid item>
               <Typography variant="headline">Login</Typography>
             </Grid>
+
             <Grid item>
-              <FormLabel>Email</FormLabel>
-            </Grid>
-            <Grid item>
-              <input
-                type="text"
+              <TextField
+                required
+                autoFocus
+                label="Email"
                 name="email"
+                margin="normal"
+                fullWidth
                 onChange={e => this.handleChange(e)}
               />
             </Grid>
+
             <Grid item>
-              <FormLabel>Password</FormLabel>
-            </Grid>
-            <Grid item>
-              <input
+              <TextField
+                required
+                fullWidth
+                label="Password"
                 type="password"
                 name="password"
+                margin="normal"
                 value={this.state.password}
                 onChange={e => this.handleChange(e)}
               />
