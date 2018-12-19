@@ -6,6 +6,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { Tooltip } from "@material-ui/core";
 import ErrorIcon from "@material-ui/icons/ErrorOutline";
 import ReturnedIcon from "@material-ui/icons/CheckBoxOutlined";
@@ -28,6 +29,7 @@ interface ILoan {
 }
 
 interface ILoansState {
+  loaded: boolean;
   data: [ILoan];
 }
 
@@ -35,6 +37,7 @@ interface ILoansProps {
   classes: {
     root: string;
     table: string;
+    progress: string;
   };
 }
 
@@ -46,6 +49,10 @@ const styles = theme =>
     },
     table: {
       minWidth: 700
+    },
+    progress: {
+      margin: "20%",
+      textAlign: "center"
     }
   });
 
@@ -56,6 +63,7 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
     super(props);
     this._isMounted = false;
     this.state = {
+      loaded: false,
       data: [
         {
           id: null,
@@ -96,7 +104,7 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
       data.forEach(element => {
         element.returned = element.timeReturned === null ? true : false;
       });
-      this._isMounted && this.setState({ data });
+      this._isMounted && this.setState({ loaded: true, data });
     }
   }
 
@@ -139,52 +147,60 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
   render() {
     const { classes } = this.props;
 
-    return (
-      <Paper className={classes.root}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <TableCell>id</TableCell>
-              <TableCell>Device id</TableCell>
-              <TableCell>Device Name</TableCell>
-              <TableCell>Loaner</TableCell>
-              <TableCell>Begins</TableCell>
-              <TableCell>Ends</TableCell>
-              <TableCell>Returned</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {this.state.data.map(row => {
-              return (
-                <TableRow key={row.id}>
-                  <TableCell>
-                    {row.timeReturned !== null ? (
-                      <Tooltip title="Returned">
-                        <ReturnedIcon style={{ color: "green" }} />
-                      </Tooltip>
-                    ) : this.checkLate(row) ? (
-                      <Tooltip title="Late">
-                        <ErrorIcon color="error" />
-                      </Tooltip>
-                    ) : null}
-                  </TableCell>
-                  <TableCell>{row.id}</TableCell>
-                  <TableCell>{row.code}</TableCell>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell>
-                    {row.loanerFirstName + " " + row.loanerLastName}
-                  </TableCell>
-                  <TableCell>{this.parsedate(row.begins)}</TableCell>
-                  <TableCell>{this.parsedate(row.ends)}</TableCell>
-                  <TableCell>{this.parsedate(row.timeReturned)}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </Paper>
-    );
+    if (!this.state.loaded) {
+      return (
+        <div className={classes.progress}>
+          <CircularProgress />
+        </div>
+      );
+    } else {
+      return (
+        <Paper className={classes.root}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell />
+                <TableCell>id</TableCell>
+                <TableCell>Device id</TableCell>
+                <TableCell>Device Name</TableCell>
+                <TableCell>Loaner</TableCell>
+                <TableCell>Begins</TableCell>
+                <TableCell>Ends</TableCell>
+                <TableCell>Returned</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.state.data.map(row => {
+                return (
+                  <TableRow key={row.id}>
+                    <TableCell>
+                      {row.timeReturned !== null ? (
+                        <Tooltip title="Returned">
+                          <ReturnedIcon style={{ color: "green" }} />
+                        </Tooltip>
+                      ) : this.checkLate(row) ? (
+                        <Tooltip title="Late">
+                          <ErrorIcon color="error" />
+                        </Tooltip>
+                      ) : null}
+                    </TableCell>
+                    <TableCell>{row.id}</TableCell>
+                    <TableCell>{row.code}</TableCell>
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell>
+                      {row.loanerFirstName + " " + row.loanerLastName}
+                    </TableCell>
+                    <TableCell>{this.parsedate(row.begins)}</TableCell>
+                    <TableCell>{this.parsedate(row.ends)}</TableCell>
+                    <TableCell>{this.parsedate(row.timeReturned)}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </Paper>
+      );
+    }
   }
 }
 

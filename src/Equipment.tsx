@@ -6,10 +6,12 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import ApiPath from "./ApiPath";
 import { getJwt, reroute } from "./helpers/jwt";
 
 interface IEquipmentState {
+  loaded: boolean;
   data: [
     {
       id: number;
@@ -24,6 +26,7 @@ interface IEquipmentProps {
   classes: {
     root: string;
     table: string;
+    progress: string;
   };
 }
 
@@ -35,6 +38,10 @@ const styles = theme =>
     },
     table: {
       minWidth: 700
+    },
+    progress: {
+      margin: "20%",
+      textAlign: "center"
     }
   });
 
@@ -45,6 +52,7 @@ class Equipment extends React.Component<IEquipmentProps, IEquipmentState> {
     super(props);
     this._isMounted = false;
     this.state = {
+      loaded: false,
       data: [{ id: null, name: "", info: "", code: null }]
     };
   }
@@ -66,7 +74,7 @@ class Equipment extends React.Component<IEquipmentProps, IEquipmentState> {
       reroute("/login");
     } else {
       const data = await fetchedData.json();
-      this._isMounted && this.setState({ data });
+      this._isMounted && this.setState({ loaded: true, data });
     }
   }
 
@@ -77,30 +85,38 @@ class Equipment extends React.Component<IEquipmentProps, IEquipmentState> {
   render() {
     const { classes } = this.props;
 
-    return (
-      <Paper className={classes.root}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Device id</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Info</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {this.state.data.map(row => {
-              return (
-                <TableRow key={row.id}>
-                  <TableCell>{row.code}</TableCell>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.info}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </Paper>
-    );
+    if (!this.state.loaded) {
+      return (
+        <div className={classes.progress}>
+          <CircularProgress />
+        </div>
+      );
+    } else {
+      return (
+        <Paper className={classes.root}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Device id</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Info</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.state.data.map(row => {
+                return (
+                  <TableRow key={row.id}>
+                    <TableCell>{row.code}</TableCell>
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell>{row.info}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </Paper>
+      );
+    }
   }
 }
 
