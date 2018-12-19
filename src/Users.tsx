@@ -98,14 +98,6 @@ class Users extends React.Component<IUsersProps, IUsersState> {
     } else {
       return (
         <Paper className={classes.root}>
-          <UserContext.Consumer>
-            {context => (
-              <div>
-                {context.id}
-                {context.name}
-              </div>
-            )}
-          </UserContext.Consumer>
           <Table>
             <TableHead>
               <TableRow>
