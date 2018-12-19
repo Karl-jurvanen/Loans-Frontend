@@ -65,8 +65,9 @@ const styles = theme =>
     },
     content: {
       flexGrow: 1,
+      alignItems: "auto",
       backgroundColor: theme.palette.background.default,
-      padding: theme.spacing.unit * 1,
+      paddingBottom: theme.spacing.unit * 1,
       minWidth: 0 // So the Typography noWrap works
     },
     list: {
@@ -186,19 +187,16 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
               {this.props.page}
             </Typography>
             <UserContext.Consumer>
-              {context => (
-                (context.id !== null) && (
+              {context =>
+                context.id !== null && (
                   <Link href="/profile">
                     <IconButton color="inherit">
                       <AccountCircle />
                     </IconButton>
                   </Link>
                 )
-              )
-
               }
             </UserContext.Consumer>
-            
           </Toolbar>
         </AppBar>
         <Hidden mdUp>
