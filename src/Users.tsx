@@ -42,15 +42,18 @@ const styles = theme =>
   });
 
 class Users extends React.Component<IUsersProps, IUsersState> {
+  _isMounted: boolean;
+
   constructor(props: any) {
     super(props);
-
+    this._isMounted = false;
     this.state = {
       data: [{ id: null, firstName: "", lastName: "", email: "", role: "" }]
     };
   }
 
   public async componentDidMount() {
+    this._isMounted = true;
     const fetchedData = await fetch(`${ApiPath}/users`, {
       method: "get",
       headers: {
@@ -67,14 +70,16 @@ class Users extends React.Component<IUsersProps, IUsersState> {
       reroute("/login");
     } else {
       const data = await fetchedData.json();
-
-      this.setState({ data });
+      this._isMounted && this.setState({ data });
     }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   render() {
     const { classes } = this.props;
-    let value = this.context;
 
     return (
       <Paper className={classes.root}>

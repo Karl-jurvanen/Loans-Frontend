@@ -11,7 +11,6 @@ import ErrorIcon from "@material-ui/icons/ErrorOutline";
 import ReturnedIcon from "@material-ui/icons/CheckBoxOutlined";
 import ApiPath from "./ApiPath";
 import { getJwt, reroute } from "./helpers/jwt";
-import Router from "next/router";
 
 interface ILoan {
   id: number;
@@ -51,9 +50,11 @@ const styles = theme =>
   });
 
 class Equipment extends React.Component<ILoansProps, ILoansState> {
+  _isMounted: boolean;
+
   constructor(props: any) {
     super(props);
-
+    this._isMounted = false;
     this.state = {
       data: [
         {
@@ -75,6 +76,7 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
   }
 
   public async componentDidMount() {
+    this._isMounted = true;
     const fetchedData = await fetch(`${ApiPath}/loans`, {
       method: "get",
       headers: {
@@ -94,8 +96,12 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
       data.forEach(element => {
         element.returned = element.timeReturned === null ? true : false;
       });
-      this.setState({ data });
+      this._isMounted && this.setState({ data });
     }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   pad(n) {

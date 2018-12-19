@@ -39,15 +39,18 @@ const styles = theme =>
   });
 
 class Equipment extends React.Component<IEquipmentProps, IEquipmentState> {
+  _isMounted: boolean;
+
   constructor(props: any) {
     super(props);
-
+    this._isMounted = false;
     this.state = {
       data: [{ id: null, name: "", info: "", code: null }]
     };
   }
 
   public async componentDidMount() {
+    this._isMounted = true;
     const fetchedData = await fetch(`${ApiPath}/equipment`, {
       method: "get",
       headers: {
@@ -63,9 +66,12 @@ class Equipment extends React.Component<IEquipmentProps, IEquipmentState> {
       reroute("/login");
     } else {
       const data = await fetchedData.json();
-
-      this.setState({ data });
+      this._isMounted && this.setState({ data });
     }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   render() {
