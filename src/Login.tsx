@@ -8,13 +8,27 @@ import Button from "@material-ui/core/Button";
 import Router from "next/router";
 import TextField from "@material-ui/core/TextField";
 import ApiPath from "./ApiPath";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import green from "@material-ui/core/colors/green";
 
 const styles = theme =>
   createStyles({
     root: {
       flexWrap: "wrap",
       width: "100%",
-      minWidth: "500",
+      minWidth: "500"
+    },
+    wrapper: {
+      margin: theme.spacing.unit,
+      position: "relative"
+    },
+    buttonProgress: {
+      color: green[500],
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      marginTop: -12,
+      marginLeft: -12
     }
   });
 
@@ -35,7 +49,7 @@ class Login extends React.Component<any, any> {
     console.log("email" + this.state.email);
     console.log("password" + this.state.password);
     event.preventDefault();
-    this.setState({ error: "" });
+    this.setState({ error: "", loading: true });
 
     await fetch(`${ApiPath}/login`, {
       method: "post",
@@ -51,7 +65,11 @@ class Login extends React.Component<any, any> {
       .then(res => {
         if (res.status === 401) {
           console.log("401");
-          this.setState({ error: "wrong username or password", password: "" });
+          this.setState({
+            error: "wrong username or password",
+            password: "",
+            loading: false
+          });
           throw 401;
         }
         this.setState({ error: "", password: "" });
@@ -72,7 +90,7 @@ class Login extends React.Component<any, any> {
 
   render() {
     const { classes } = this.props;
-
+    const { loading } = this.state;
     return (
       <Paper className={classes.root}>
         <form onSubmit={e => this.handleSubmit(e)}>
@@ -116,10 +134,25 @@ class Login extends React.Component<any, any> {
                 {this.state.error}
               </Typography>
             </Grid>
+
             <Grid item>
-              <Button type="submit" value="Submit" variant="text" fullWidth>
-                Sing in
-              </Button>
+              <div className={classes.wrapper}>
+                <Button
+                  type="submit"
+                  value="Submit"
+                  variant="text"
+                  disabled={loading}
+                  fullWidth
+                >
+                  Sing in
+                </Button>
+                {loading && (
+                  <CircularProgress
+                    size={24}
+                    className={classes.buttonProgress}
+                  />
+                )}
+              </div>
             </Grid>
           </Grid>
         </form>
