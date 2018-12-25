@@ -33,6 +33,7 @@ const styles = theme =>
   });
 
 class Login extends React.Component<any, any> {
+  timer;
   constructor(props) {
     super(props);
     this.state = { email: "", password: "", error: "" };
@@ -41,6 +42,20 @@ class Login extends React.Component<any, any> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  // call API's test endpoint to wake the api
+  // to make loggin in faster
+  async componentDidMount() {
+    await fetch(`${ApiPath}/test`, {
+      method: "get",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json"
+      }
+    });
+  }
+  componentWillUnmount() {
+    clearTimeout(this.timer);
+  }
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value });
   }
@@ -51,6 +66,10 @@ class Login extends React.Component<any, any> {
     event.preventDefault();
     this.setState({ error: "", loading: true });
 
+    //set timer
+    this.timer = setTimeout(() => {
+      this.setState({ loading: false });
+    }, 3000);
     await fetch(`${ApiPath}/login`, {
       method: "post",
       headers: {
