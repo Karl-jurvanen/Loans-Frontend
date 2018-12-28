@@ -10,14 +10,15 @@ class Home extends React.Component<any, any> {
     super(props);
     this.state = {
       value: {
-        name: "test",
-        id: null
+        name: "Guest",
+        id: null,
+        admin: false
       }
     };
   }
   handleLogout = () => {
     localStorage.removeItem("jwt");
-    this.setState({ value: { name: "Guest", id: null } });
+    this.setState({ value: { name: "Guest", id: null, admin: false } });
   };
   componentDidMount() {
     this.checkJwt();
@@ -25,14 +26,21 @@ class Home extends React.Component<any, any> {
   checkJwt = () => {
     const jwt = getJwt();
     if (!jwt) {
-      this.setState({ value: { name: "Guest", id: null } });
+      this.setState({ value: { name: "Guest", id: null, admin: false } });
       console.log("guest");
     } else {
       const user = jwtDecode(jwt);
       console.log(user);
-      this.setState({ value: { name: "logged in", id: user.id } });
+
+      this.setState({
+        value: {
+          name: user.name,
+          id: user.id,
+          admin: user.admin === "true"
+        }
+      });
     }
-  };
+  }
 
   render() {
     return (

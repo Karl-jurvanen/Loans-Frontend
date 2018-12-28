@@ -1,5 +1,6 @@
 import React from "react";
 import { withStyles, createStyles, withTheme } from "@material-ui/core/styles";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -15,6 +16,7 @@ import {
   CssBaseline
 } from "@material-ui/core";
 import UserIcon from "@material-ui/icons/AccountBoxOutlined";
+import DashboardIcon from "@material-ui/icons/DashboardOutlined";
 import EquipmentIcon from "@material-ui/icons/Devices";
 import LoanIcon from "@material-ui/icons/CheckBoxOutlined";
 import Link from "next/link";
@@ -92,50 +94,95 @@ interface IDrawerProps {
 
 interface IDrawerState {
   mobileOpen: boolean;
+  linkList: any[];
 }
 
-const listItems = [
+const adminItems = [
+  {
+    icon: <DashboardIcon />,
+    text: "Home",
+    link: "/"
+  },
   {
     icon: <UserIcon />,
-    text: "Users"
+    text: "Users",
+    link: "users"
   },
   {
     icon: <EquipmentIcon />,
-    text: "Equipment"
+    text: "Equipment",
+    link: "equipment"
   },
   {
     icon: <LoanIcon />,
-    text: "Loans"
+    text: "Loans",
+    link: "loans"
+
+  }
+];
+
+const userItems = [
+  {
+    icon: <DashboardIcon />,
+    text: "Home",
+    link: "/"
+  },
+  {
+    icon: <EquipmentIcon />,
+    text: "Equipment",
+    link: "equipment"
+
+  },
+  {
+    icon: <LoanIcon />,
+    text: "Loans",
+    link: "loans"
   }
 ];
 
 class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
   state = {
-    mobileOpen: false
+    mobileOpen: false,
+    linkList: []
   };
 
   handleDrawerToggle = () => {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
   };
 
+  componentDidMount() {
+    let value = this.context;
+  }
+
   render() {
     const { classes } = this.props;
+    let list = 1;
     const sideList = (
       <div className={classes.list}>
         <UserContext.Consumer>
           {context => (
             <List>
-              {// context.id is null if user is not logged in
+              {
+              // context.id is null if user is not logged in
               // render only login link if not logged in
-              context.id !== null &&
-                listItems.map(item => (
-                  <Link key={item.text} href={item.text.toLowerCase()}>
-                    <ListItem button>
-                      <ListItemIcon>{item.icon}</ListItemIcon>
-                      <ListItemText primary={item.text} />
-                    </ListItem>
-                  </Link>
-                ))}
+              // render different links based on loggin in user's admin status
+              context.id !== null && ( context.admin
+                ? adminItems.map(item => (
+                    <Link key={item.text} href={item.link}>
+                      <ListItem button>
+                        <ListItemIcon>{item.icon}</ListItemIcon>
+                        <ListItemText primary={item.text} />
+                      </ListItem>
+                    </Link>
+                  ))
+                : userItems.map(item => (
+                    <Link key={item.text} href={item.link}>
+                      <ListItem button>
+                        <ListItemIcon>{item.icon}</ListItemIcon>
+                        <ListItemText primary={item.text} />
+                      </ListItem>
+                    </Link>
+                  )))}
               {context.id === null ? (
                 <Link href="/login">
                   <ListItem button>
@@ -150,7 +197,7 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
                   button
                   onClick={() => {
                     localStorage.removeItem("jwt");
-                    reroute("/login")
+                    reroute("/login");
                   }}
                 >
                   <ListItemIcon>
@@ -188,22 +235,26 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
             <UserContext.Consumer>
               {context =>
                 context.id !== null && (
+                  <React.Fragment>
+                  <Typography color="inherit">{context.name}</Typography>
                   <Link href="/profile">
                     <IconButton color="inherit">
                       <AccountCircle />
                     </IconButton>
                   </Link>
+                  </React.Fragment>
                 )
               }
             </UserContext.Consumer>
           </Toolbar>
         </AppBar>
         <Hidden mdUp>
-          <Drawer
+          <SwipeableDrawer
             variant="temporary"
             anchor={"left"}
             open={this.state.mobileOpen}
             onClose={this.handleDrawerToggle}
+            onOpen={this.handleDrawerToggle}
             classes={{
               paper: classes.drawerPaper
             }}
@@ -212,7 +263,7 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
             }}
           >
             {sideList}
-          </Drawer>
+          </SwipeableDrawer>
         </Hidden>
         <Hidden smDown implementation="css">
           <Drawer

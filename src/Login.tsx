@@ -42,17 +42,6 @@ class Login extends React.Component<any, any> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  // call API's test endpoint to wake the api
-  // to make loggin in faster
-  async componentDidMount() {
-    await fetch(`${ApiPath}/test`, {
-      method: "get",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json"
-      }
-    });
-  }
   componentWillUnmount() {
     clearTimeout(this.timer);
   }
@@ -69,7 +58,7 @@ class Login extends React.Component<any, any> {
     //set timer
     this.timer = setTimeout(() => {
       this.setState({ loading: false });
-    }, 3000);
+    }, 5000);
     await fetch(`${ApiPath}/login`, {
       method: "post",
       headers: {
@@ -104,7 +93,7 @@ class Login extends React.Component<any, any> {
   }
 
   reroute = () => {
-    Router.push("/users");
+    Router.push("/loans");
   };
 
   render() {
