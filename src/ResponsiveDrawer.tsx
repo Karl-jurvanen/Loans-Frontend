@@ -46,6 +46,12 @@ const styles = theme =>
     grow: {
       flexGrow: 1
     },
+    title: {
+      [theme.breakpoints.down("md")]: {
+        display: "none"
+      },
+      width: drawerWidth
+    },
     navIconHide: {
       [theme.breakpoints.up("md")]: {
         display: "none"
@@ -82,6 +88,7 @@ interface IDrawerProps {
     root: any;
     appBar: any;
     grow: any;
+    title: any;
     navIconHide: any;
     toolbar: any;
     drawerPaper: any;
@@ -225,6 +232,12 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
             >
               <MenuIcon />
             </IconButton>
+            <Typography
+              variant="title"
+              color="inherit"
+              className={classes.title}
+            > Loan System
+            </Typography>
             <Typography
               variant="title"
               color="inherit"

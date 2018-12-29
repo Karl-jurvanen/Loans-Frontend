@@ -5,8 +5,7 @@ import { Typography } from "@material-ui/core";
 import Dashboard from '../src/Dashboard'
 import Login from '../src/Login'
 export default () => (
-  <Home page="Dashboard">
+  <Home page="Home">
     <Dashboard /> 
-    <Login />
   </Home>
 );
