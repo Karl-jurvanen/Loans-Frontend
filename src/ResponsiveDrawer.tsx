@@ -1,5 +1,6 @@
 import React from "react";
 import { withStyles, createStyles, withTheme } from "@material-ui/core/styles";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -7,7 +8,6 @@ import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Hidden from "@material-ui/core/Hidden";
-import Divider from "@material-ui/core/Divider";
 import MenuIcon from "@material-ui/icons/Menu";
 import {
   ListItemIcon,
@@ -16,9 +16,14 @@ import {
   CssBaseline
 } from "@material-ui/core";
 import UserIcon from "@material-ui/icons/AccountBoxOutlined";
+import DashboardIcon from "@material-ui/icons/DashboardOutlined";
 import EquipmentIcon from "@material-ui/icons/Devices";
 import LoanIcon from "@material-ui/icons/CheckBoxOutlined";
 import Link from "next/link";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import UserContext from "./UserContext";
+import { reroute } from "./helpers/jwt";
+import Router from "next/router";
 
 const drawerWidth = 240;
 
@@ -35,7 +40,17 @@ const styles = theme =>
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
-      position: "fixed"
+      position: "fixed",
+      flexGrow: 1
+    },
+    grow: {
+      flexGrow: 1
+    },
+    title: {
+      [theme.breakpoints.down("md")]: {
+        display: "none"
+      },
+      width: drawerWidth
     },
     navIconHide: {
       [theme.breakpoints.up("md")]: {
@@ -57,8 +72,9 @@ const styles = theme =>
     },
     content: {
       flexGrow: 1,
+      alignItems: "auto",
       backgroundColor: theme.palette.background.default,
-      padding: theme.spacing.unit * 1,
+      paddingBottom: theme.spacing.unit * 1,
       minWidth: 0 // So the Typography noWrap works
     },
     list: {
@@ -71,6 +87,8 @@ interface IDrawerProps {
   classes: {
     root: any;
     appBar: any;
+    grow: any;
+    title: any;
     navIconHide: any;
     toolbar: any;
     drawerPaper: any;
@@ -83,57 +101,128 @@ interface IDrawerProps {
 
 interface IDrawerState {
   mobileOpen: boolean;
+  linkList: any[];
 }
+
+const adminItems = [
+  {
+    icon: <DashboardIcon />,
+    text: "Home",
+    link: "/"
+  },
+  {
+    icon: <UserIcon />,
+    text: "Users",
+    link: "users"
+  },
+  {
+    icon: <EquipmentIcon />,
+    text: "Equipment",
+    link: "equipment"
+  },
+  {
+    icon: <LoanIcon />,
+    text: "Loans",
+    link: "loans"
+
+  }
+];
+
+const userItems = [
+  {
+    icon: <DashboardIcon />,
+    text: "Home",
+    link: "/"
+  },
+  {
+    icon: <EquipmentIcon />,
+    text: "Equipment",
+    link: "equipment"
+
+  },
+  {
+    icon: <LoanIcon />,
+    text: "Loans",
+    link: "loans"
+  }
+];
 
 class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
   state = {
-    mobileOpen: false
+    mobileOpen: false,
+    linkList: []
   };
 
   handleDrawerToggle = () => {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
   };
 
+  componentDidMount() {
+    let value = this.context;
+  }
+
   render() {
     const { classes } = this.props;
-
+    let list = 1;
     const sideList = (
       <div className={classes.list}>
-        <List>
-          {["Users", "Equipment", "Loans"].map((text, index) => (
-            <Link
-              key={text}
-              href={
-                {
-                  // switch statement that resolves link paths
-                  0: "users",
-                  1: "equipment",
-                  2: "loans",
-                }[index]
-              }
-            >
-              <ListItem button>
-                <ListItemIcon>
-                  {
-                    {
-                      0: <UserIcon />,
-                      1: <EquipmentIcon />,
-                      2: <LoanIcon />
-                    }[index]
-                  }
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            </Link>
-          ))}
-        </List>
+        <UserContext.Consumer>
+          {context => (
+            <List>
+              {
+              // context.id is null if user is not logged in
+              // render only login link if not logged in
+              // render different links based on loggin in user's admin status
+              context.id !== null && ( context.admin
+                ? adminItems.map(item => (
+                    <Link key={item.text} href={item.link}>
+                      <ListItem button>
+                        <ListItemIcon>{item.icon}</ListItemIcon>
+                        <ListItemText primary={item.text} />
+                      </ListItem>
+                    </Link>
+                  ))
+                : userItems.map(item => (
+                    <Link key={item.text} href={item.link}>
+                      <ListItem button>
+                        <ListItemIcon>{item.icon}</ListItemIcon>
+                        <ListItemText primary={item.text} />
+                      </ListItem>
+                    </Link>
+                  )))}
+              {context.id === null ? (
+                <Link href="/login">
+                  <ListItem button>
+                    <ListItemIcon>
+                      <AccountCircle />
+                    </ListItemIcon>
+                    <ListItemText primary="Login" />
+                  </ListItem>
+                </Link>
+              ) : (
+                <ListItem
+                  button
+                  onClick={() => {
+                    localStorage.removeItem("jwt");
+                    reroute("/login");
+                  }}
+                >
+                  <ListItemIcon>
+                    <AccountCircle />
+                  </ListItemIcon>
+                  <ListItemText primary="Logout" />
+                </ListItem>
+              )}
+            </List>
+          )}
+        </UserContext.Consumer>
       </div>
     );
 
     return (
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar className={classes.appBar}>
+        <AppBar className={classes.appBar} position="static">
           <Toolbar>
             <IconButton
               color="inherit"
@@ -143,17 +232,42 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="title" color="inherit" noWrap>
+            <Typography
+              variant="title"
+              color="inherit"
+              className={classes.title}
+            > Loan System
+            </Typography>
+            <Typography
+              variant="title"
+              color="inherit"
+              className={classes.grow}
+            >
               {this.props.page}
             </Typography>
+            <UserContext.Consumer>
+              {context =>
+                context.id !== null && (
+                  <React.Fragment>
+                  <Typography color="inherit">{context.name}</Typography>
+                  <Link href="/profile">
+                    <IconButton color="inherit">
+                      <AccountCircle />
+                    </IconButton>
+                  </Link>
+                  </React.Fragment>
+                )
+              }
+            </UserContext.Consumer>
           </Toolbar>
         </AppBar>
         <Hidden mdUp>
-          <Drawer
+          <SwipeableDrawer
             variant="temporary"
             anchor={"left"}
             open={this.state.mobileOpen}
             onClose={this.handleDrawerToggle}
+            onOpen={this.handleDrawerToggle}
             classes={{
               paper: classes.drawerPaper
             }}
@@ -162,7 +276,7 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
             }}
           >
             {sideList}
-          </Drawer>
+          </SwipeableDrawer>
         </Hidden>
         <Hidden smDown implementation="css">
           <Drawer

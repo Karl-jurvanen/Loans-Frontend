@@ -7,9 +7,13 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import ApiPath from './ApiPath'
+import CircularProgress from "@material-ui/core/CircularProgress";
+import ApiPath from "./ApiPath";
+import UserContext from "./UserContext";
+import { getJwt, reroute } from "./helpers/jwt";
 
 interface IUsersState {
+  loaded: boolean;
   data: [
     {
       id: number;
@@ -25,6 +29,7 @@ interface IUsersProps {
   classes: {
     root: string;
     table: string;
+    progress: string;
   };
 }
 
@@ -36,58 +41,90 @@ const styles = theme =>
     },
     table: {
       minWidth: 700
+    },
+    progress: {
+      margin: "20%",
+      textAlign: "center"
     }
   });
 
 class Users extends React.Component<IUsersProps, IUsersState> {
+  _isMounted: boolean;
+
   constructor(props: any) {
     super(props);
-
+    this._isMounted = false;
     this.state = {
+      loaded: false,
       data: [{ id: null, firstName: "", lastName: "", email: "", role: "" }]
     };
   }
 
   public async componentDidMount() {
-    const fetchedData = await fetch(`${ApiPath}/users`);
+    this._isMounted = true;
+    const fetchedData = await fetch(`${ApiPath}/users`, {
+      method: "get",
+      headers: {
+        Authorization: `Bearer ${getJwt()}`,
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json"
+      }
+    });
+    // this token is invalid, remove it and redirect to login
 
-    const data = await fetchedData.json();
+    if (fetchedData.status === 401) {
+      localStorage.removeItem("jwt");
+      console.log("401");
+      reroute("/login");
+    } else {
+      const data = await fetchedData.json();
+      this._isMounted && this.setState({ loaded: true, data });
+    }
+  }
 
-    this.setState({ data });
-    console.log(this.state);
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   render() {
     const { classes } = this.props;
 
-    return (
-      <Paper className={classes.root}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>id</TableCell>
-              <TableCell>First Name</TableCell>
-              <TableCell>Last Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Role</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {this.state.data.map(row => {
-              return (
-                <TableRow key={row.id}>
-                  <TableCell>{row.id}</TableCell>
-                  <TableCell>{row.firstName}</TableCell>
-                  <TableCell>{row.lastName}</TableCell>
-                  <TableCell>{row.email}</TableCell>
-                  <TableCell>{row.role}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </Paper>
-    );
+    if (!this.state.loaded) {
+      return (
+        <div className={classes.progress}>
+          <CircularProgress />
+        </div>
+      );
+    } else {
+      return (
+        <Paper className={classes.root}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>id</TableCell>
+                <TableCell>First Name</TableCell>
+                <TableCell>Last Name</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Role</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.state.data.map(row => {
+                return (
+                  <TableRow key={row.id}>
+                    <TableCell>{row.id}</TableCell>
+                    <TableCell>{row.firstName}</TableCell>
+                    <TableCell>{row.lastName}</TableCell>
+                    <TableCell>{row.email}</TableCell>
+                    <TableCell>{row.role}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </Paper>
+      );
+    }
   }
 }
 
