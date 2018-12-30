@@ -106,11 +106,6 @@ interface IDrawerState {
 
 const adminItems = [
   {
-    icon: <DashboardIcon />,
-    text: "Home",
-    link: "/"
-  },
-  {
     icon: <UserIcon />,
     text: "Users",
     link: "users"
@@ -124,21 +119,14 @@ const adminItems = [
     icon: <LoanIcon />,
     text: "Loans",
     link: "loans"
-
   }
 ];
 
 const userItems = [
   {
-    icon: <DashboardIcon />,
-    text: "Home",
-    link: "/"
-  },
-  {
     icon: <EquipmentIcon />,
     text: "Equipment",
     link: "equipment"
-
   },
   {
     icon: <LoanIcon />,
@@ -157,39 +145,42 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
   };
 
-  componentDidMount() {
-    let value = this.context;
-  }
-
   render() {
     const { classes } = this.props;
-    let list = 1;
     const sideList = (
       <div className={classes.list}>
         <UserContext.Consumer>
           {context => (
             <List>
-              {
-              // context.id is null if user is not logged in
+              <Link href="/">
+                <ListItem button>
+                  <ListItemIcon>
+                    <DashboardIcon/>
+                  </ListItemIcon>
+                  <ListItemText primary="Home" />
+                </ListItem>
+              </Link>
+              {// context.id is null if user is not logged in
               // render only login link if not logged in
               // render different links based on loggin in user's admin status
-              context.id !== null && ( context.admin
-                ? adminItems.map(item => (
-                    <Link key={item.text} href={item.link}>
-                      <ListItem button>
-                        <ListItemIcon>{item.icon}</ListItemIcon>
-                        <ListItemText primary={item.text} />
-                      </ListItem>
-                    </Link>
-                  ))
-                : userItems.map(item => (
-                    <Link key={item.text} href={item.link}>
-                      <ListItem button>
-                        <ListItemIcon>{item.icon}</ListItemIcon>
-                        <ListItemText primary={item.text} />
-                      </ListItem>
-                    </Link>
-                  )))}
+              context.id !== null &&
+                (context.admin
+                  ? adminItems.map(item => (
+                      <Link key={item.text} href={item.link}>
+                        <ListItem button>
+                          <ListItemIcon>{item.icon}</ListItemIcon>
+                          <ListItemText primary={item.text} />
+                        </ListItem>
+                      </Link>
+                    ))
+                  : userItems.map(item => (
+                      <Link key={item.text} href={item.link}>
+                        <ListItem button>
+                          <ListItemIcon>{item.icon}</ListItemIcon>
+                          <ListItemText primary={item.text} />
+                        </ListItem>
+                      </Link>
+                    )))}
               {context.id === null ? (
                 <Link href="/login">
                   <ListItem button>
@@ -236,7 +227,9 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
               variant="title"
               color="inherit"
               className={classes.title}
-            > Loan System
+            >
+              {" "}
+              Loan System
             </Typography>
             <Typography
               variant="title"
@@ -249,12 +242,12 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
               {context =>
                 context.id !== null && (
                   <React.Fragment>
-                  <Typography color="inherit">{context.name}</Typography>
-                  <Link href="/profile">
-                    <IconButton color="inherit">
-                      <AccountCircle />
-                    </IconButton>
-                  </Link>
+                    <Typography color="inherit">{context.name}</Typography>
+                    <Link href="/profile">
+                      <IconButton color="inherit">
+                        <AccountCircle />
+                      </IconButton>
+                    </Link>
                   </React.Fragment>
                 )
               }
