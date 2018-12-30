@@ -50,8 +50,6 @@ class Login extends React.Component<any, any> {
   }
 
   async handleSubmit(event) {
-    console.log("email" + this.state.email);
-    console.log("password" + this.state.password);
     event.preventDefault();
     this.setState({ error: "", loading: true });
 
@@ -86,7 +84,6 @@ class Login extends React.Component<any, any> {
       })
       .then(res => {
         localStorage.setItem("jwt", res.token);
-        console.log(res);
         this.reroute();
       })
       .catch(error => console.error("Error:", error));

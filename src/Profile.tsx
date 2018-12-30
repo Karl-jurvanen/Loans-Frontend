@@ -39,7 +39,6 @@ class Profile extends React.Component<any, any> {
     const userId = getUserId();
     if (!userId) {
       localStorage.removeItem("jwt");
-      console.log("no id");
       reroute("/login");
     }
     const fetchedData = await fetch(`${ApiPath}/users/${userId}`, {
@@ -54,12 +53,10 @@ class Profile extends React.Component<any, any> {
 
     if (fetchedData.status === 401) {
       localStorage.removeItem("jwt");
-      console.log("401");
       reroute("/login");
     } else {
       const data = await fetchedData.json();
       this._isMounted && this.setState({ data });
-      console.log(data);
     }
   }
   componentWillUnmount() {
@@ -69,10 +66,6 @@ class Profile extends React.Component<any, any> {
   render() {
     const { classes } = this.props;
     const user = this.state.data;
-
-    for (var key in user) {
-      console.log(user[key]);
-    }
     return this.state.data.id === null ? (
       <div>loading</div>
     ) : (

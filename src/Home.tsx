@@ -27,11 +27,8 @@ class Home extends React.Component<any, any> {
     const jwt = getJwt();
     if (!jwt) {
       this.setState({ value: { name: "Guest", id: null, admin: false } });
-      console.log("guest");
     } else {
       const user = jwtDecode(jwt);
-      console.log(user);
-
       this.setState({
         value: {
           name: user.name,
