@@ -1,17 +1,12 @@
 import * as React from "react";
 import { withStyles, createStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Tooltip } from "@material-ui/core";
 import ErrorIcon from "@material-ui/icons/ErrorOutline";
-import ReturnedIcon from "@material-ui/icons/CheckBoxOutlined";
+import ReturnedIcon from "@material-ui/icons/CheckCircleOutline";
 import ApiPath from "./ApiPath";
 import { getJwt, reroute } from "./helpers/jwt";
+import MUIDataTable from "mui-datatables";
 
 interface ILoan {
   id: number;
@@ -55,6 +50,75 @@ const styles = theme =>
       textAlign: "center"
     }
   });
+
+const columns = [
+  {
+    name: "Status",
+    options: {
+      customBodyRender: (value, tableMeta, updateValue) => {
+        const returned = tableMeta.rowData[7];
+
+        if (returned === "") {
+          console.log("null");
+        }
+        switch (value) {
+          case "Late":
+            return (
+              <Tooltip title="Late">
+                <ErrorIcon color="error" />
+              </Tooltip>
+            );
+
+          case "Returned":
+            return (
+              <Tooltip title="Returned">
+                <ReturnedIcon style={{ color: "green" }} />
+              </Tooltip>
+            );
+          case "Loaned":
+            return <div />;
+        }
+      }
+    }
+  },
+  {
+    name: "Id",
+    options: {
+      filter: false
+    }
+  },
+  { name: "Device Id", options: {} },
+  { name: "Device Name", options: {} },
+  { name: "Loaner", options: {} },
+  {
+    name: "Begins",
+    options: {
+      filter: false
+    }
+  },
+  {
+    name: "Ends",
+    options: {
+      filter: false
+    }
+  },
+  {
+    name: "Returned",
+    options: {
+      filter: false
+    }
+  }
+];
+
+const options = {
+  filterType: "dropdown",
+  responsive: "scroll",
+  print: false,
+  download: false,
+  selectableRows: false,
+  rowsPerPage: 5,
+  rowsPerPageOptions: [5, 10, 20]
+};
 
 class Equipment extends React.Component<ILoansProps, ILoansState> {
   _isMounted: boolean;
@@ -135,12 +199,14 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
     return output;
   }
 
-  checkLate(item: ILoan) {
+  checkStatus(item: ILoan) {
     let date = new Date(item.ends);
-    if (date.getTime() < new Date().getTime() && item.timeReturned === null) {
-      return true;
+    if (item.timeReturned !== null) {
+      return "Returned";
+    } else if (date.getTime() < new Date().getTime()) {
+      return "Late";
     } else {
-      return false;
+      return "Loaned";
     }
   }
 
@@ -155,50 +221,33 @@ class Equipment extends React.Component<ILoansProps, ILoansState> {
       );
     } else {
       return (
-        <Paper className={classes.root}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell />
-                <TableCell>id</TableCell>
-                <TableCell>Device id</TableCell>
-                <TableCell>Device Name</TableCell>
-                <TableCell>Loaner</TableCell>
-                <TableCell>Begins</TableCell>
-                <TableCell>Ends</TableCell>
-                <TableCell>Returned</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.state.data.map(row => {
-                return (
-                  <TableRow key={row.id}>
-                    <TableCell>
-                      {row.timeReturned !== null ? (
-                        <Tooltip title="Returned">
-                          <ReturnedIcon style={{ color: "green" }} />
-                        </Tooltip>
-                      ) : this.checkLate(row) ? (
-                        <Tooltip title="Late">
-                          <ErrorIcon color="error" />
-                        </Tooltip>
-                      ) : null}
-                    </TableCell>
-                    <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.code}</TableCell>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>
-                      {row.loanerFirstName + " " + row.loanerLastName}
-                    </TableCell>
-                    <TableCell>{this.parsedate(row.begins)}</TableCell>
-                    <TableCell>{this.parsedate(row.ends)}</TableCell>
-                    <TableCell>{this.parsedate(row.timeReturned)}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </Paper>
+        // <TableCell>{row.id}</TableCell>
+        // <TableCell>{row.code}</TableCell>
+        // <TableCell>{row.name}</TableCell>
+        // <TableCell>
+        //   {row.loanerFirstName + " " + row.loanerLastName}
+        // </TableCell>
+        // <TableCell>{this.parsedate(row.begins)}</TableCell>
+        // <TableCell>{this.parsedate(row.ends)}</TableCell>
+        // <TableCell>{this.parsedate(row.timeReturned)}</TableCell>
+
+        <MUIDataTable
+          title={"Loans"}
+          data={this.state.data.map(item => {
+            return [
+              this.checkStatus(item),
+              item.id,
+              item.code,
+              item.name,
+              item.loanerFirstName + " " + item.loanerLastName,
+              this.parsedate(item.begins),
+              this.parsedate(item.ends),
+              this.parsedate(item.timeReturned)
+            ];
+          })}
+          columns={columns}
+          options={options}
+        />
       );
     }
   }
