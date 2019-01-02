@@ -226,17 +226,9 @@ class ResponsiveDrawer extends React.Component<IDrawerProps, IDrawerState> {
             <Typography
               variant="title"
               color="inherit"
-              className={classes.title}
-            >
-              {" "}
-              Loan System
-            </Typography>
-            <Typography
-              variant="title"
-              color="inherit"
               className={classes.grow}
             >
-              {this.props.page}
+              Loan System
             </Typography>
             <UserContext.Consumer>
               {context =>
