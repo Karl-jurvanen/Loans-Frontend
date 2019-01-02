@@ -1,17 +1,11 @@
 import * as React from "react";
-import Grid from "@material-ui/core/Grid";
 import { withStyles, createStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ApiPath from "./ApiPath";
 import UserContext from "./UserContext";
 import { getJwt, reroute } from "./helpers/jwt";
 
+import MUIDataTable from "mui-datatables";
 interface IUsersState {
   loaded: boolean;
   data: [
@@ -48,6 +42,8 @@ const styles = theme =>
     }
   });
 
+const columns = ["Id", "First Name", "Last Name", "Email", "Role"];
+
 class Users extends React.Component<IUsersProps, IUsersState> {
   _isMounted: boolean;
 
@@ -78,10 +74,10 @@ class Users extends React.Component<IUsersProps, IUsersState> {
       reroute("/login");
     } else {
       const data = await fetchedData.json();
+      //const data = null
       this._isMounted && this.setState({ loaded: true, data });
     }
   }
-
   componentWillUnmount() {
     this._isMounted = false;
   }
@@ -89,6 +85,13 @@ class Users extends React.Component<IUsersProps, IUsersState> {
   render() {
     const { classes } = this.props;
 
+    const options = {
+      filterType: "dropdown",
+      responsive: "scroll",
+      print: false,
+      download: false,
+      selectableRows: false,
+    };
     if (!this.state.loaded) {
       return (
         <div className={classes.progress}>
@@ -97,32 +100,20 @@ class Users extends React.Component<IUsersProps, IUsersState> {
       );
     } else {
       return (
-        <Paper className={classes.root}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>id</TableCell>
-                <TableCell>First Name</TableCell>
-                <TableCell>Last Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Role</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.state.data.map(row => {
-                return (
-                  <TableRow key={row.id}>
-                    <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.firstName}</TableCell>
-                    <TableCell>{row.lastName}</TableCell>
-                    <TableCell>{row.email}</TableCell>
-                    <TableCell>{row.role}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </Paper>
+        <MUIDataTable
+          title={"Users"}
+          data={this.state.data.map(item => {
+            return [
+              item.id,
+              item.firstName,
+              item.lastName,
+              item.email,
+              item.role
+            ];
+          })}
+          columns={columns}
+          options={options}
+        />
       );
     }
   }
