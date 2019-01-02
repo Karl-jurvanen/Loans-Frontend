@@ -1,5 +1,4 @@
 import * as React from "react";
-import { withStyles, createStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -9,7 +8,15 @@ import TableRow from "@material-ui/core/TableRow";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ApiPath from "./ApiPath";
 import { getJwt, reroute } from "./helpers/jwt";
+import MUIDataTable from "mui-datatables";
 
+import {
+  createMuiTheme,
+  MuiThemeProvider,
+  withStyles,
+  createStyles
+} from "@material-ui/core/styles";
+import { Overrides } from "@material-ui/core/styles/overrides";
 interface IEquipmentState {
   loaded: boolean;
   data: [
@@ -37,13 +44,15 @@ const styles = theme =>
       overflowX: "auto"
     },
     table: {
-      minWidth: 700
+      minWidth: 700,
+      maxHeight: 400
     },
     progress: {
       margin: "20%",
       textAlign: "center"
     }
   });
+const columns = ["Device Id", "Name", "Info"];
 
 class Equipment extends React.Component<IEquipmentProps, IEquipmentState> {
   _isMounted: boolean;
@@ -85,6 +94,16 @@ class Equipment extends React.Component<IEquipmentProps, IEquipmentState> {
   render() {
     const { classes } = this.props;
 
+    const options = {
+      filterType: "dropdown",
+      responsive: "scroll",
+      print: false,
+      download: false,
+      selectableRows: false,
+      rowsPerPage: 5,
+      rowsPerPageOptions: [5, 10, 20]
+    };
+
     if (!this.state.loaded) {
       return (
         <div className={classes.progress}>
@@ -93,28 +112,14 @@ class Equipment extends React.Component<IEquipmentProps, IEquipmentState> {
       );
     } else {
       return (
-        <Paper className={classes.root}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Device id</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Info</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.state.data.map(row => {
-                return (
-                  <TableRow key={row.id}>
-                    <TableCell>{row.code}</TableCell>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.info}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </Paper>
+          <MUIDataTable
+            title={"Equipment"}
+            data={this.state.data.map(item => {
+              return [item.code, item.name, item.info];
+            })}
+            columns={columns}
+            options={options}
+          />
       );
     }
   }
