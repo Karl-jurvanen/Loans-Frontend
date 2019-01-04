@@ -100,8 +100,8 @@ class Equipment extends React.Component<IEquipmentProps, IEquipmentState> {
       print: false,
       download: false,
       selectableRows: false,
-      rowsPerPage: 5,
-      rowsPerPageOptions: [5, 10, 20]
+      rowsPerPage: 10,
+      rowsPerPageOptions: [10, 20, 100]
     };
 
     if (!this.state.loaded) {
